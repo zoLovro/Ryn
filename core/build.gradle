@@ -1,0 +1,26 @@
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+eclipse.project.name = appName + '-core'
+
+java {
+  sourceCompatibility = JavaVersion.VERSION_17
+  targetCompatibility = JavaVersion.VERSION_17
+}
+
+if (JavaVersion.current().isJava9Compatible()) {
+  tasks.withType(JavaCompile) {
+    options.release.set(17)
+  }
+}
+
+dependencies {
+  api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+  api "com.badlogicgames.gdx:gdx:$gdxVersion"
+  api "com.github.lyze237:gdx-UnBox2D:$unbox2dVersion"
+  api "com.github.tommyettinger:anim8-gdx:$anim8Version"
+  api "games.rednblack.miniaudio:miniaudio:$miniaudioVersion"
+  api "space.earlygrey:shapedrawer:$shapeDrawerVersion"
+
+  if(enableGraalNative == 'true') {
+    implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
+  }
+}

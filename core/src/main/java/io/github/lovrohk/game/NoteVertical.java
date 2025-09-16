@@ -24,4 +24,8 @@ public class NoteVertical extends Note {
     public void draw(SpriteBatch batch) {
         batch.draw(verticalTexture, 200, y);
     }
+
+    public int getHitLine() {
+        return hitLine;
+    }
 }

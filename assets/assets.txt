@@ -1,2 +1,2 @@
 .gitkeep
-notes/New Piskel.png
+notes/verticalNote.png

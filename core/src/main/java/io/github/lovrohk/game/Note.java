@@ -20,7 +20,7 @@ public abstract class Note {
     public abstract void update(float delta, float songTime);
 
     // every note must implement its own draw logic
-    public abstract void draw(SpriteBatch batch);
+    public abstract void draw(SpriteBatch batch, int xPos);
 
     // optional: generic hit detection
     public boolean isHit() {

@@ -8,12 +8,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class NoteManager {
     private List<Note> notes;
     List<Note> toRemove = new ArrayList<>();
     int[] accuracy  = new int[]{0, 0, 0};
     int combo = 0;
+    Random rand = new Random();
+
+    
 
     // sound stuff
     Sound hitSound = Gdx.audio.newSound(Gdx.files.internal("audio/sounds/hitSound.wav"));
@@ -39,9 +43,13 @@ public class NoteManager {
         }
     }
 
-    public void draw(SpriteBatch batch) {
+    public void draw(SpriteBatch batch, List<Integer> positionList) {
         for (Note note : notes) {
-            note.draw(batch);
+            /* chooses a random integer (most likely 1-4 since its size is 4 for now) 
+                and then grabs the value of the integer from the list */
+            int randInteger = rand.nextInt(positionList.size());
+            int xPos = positionList.get(randInteger);
+            note.draw(batch, xPos);
         }
     }
 

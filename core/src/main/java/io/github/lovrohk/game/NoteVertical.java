@@ -21,8 +21,8 @@ public class NoteVertical extends Note {
     }
 
     @Override
-    public void draw(SpriteBatch batch) {
-        batch.draw(verticalTexture, 200, y);
+    public void draw(SpriteBatch batch, int xPos) {
+        batch.draw(verticalTexture, xPos, y);
     }
 
     public int getHitLine() {

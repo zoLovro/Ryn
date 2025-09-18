@@ -39,10 +39,18 @@ public class GameLoop implements Screen {
 
     private Music song;
 
-    int screenWidth;
-    int screenHeight;
+    private int screenWidth;
+    private int screenHeight;
     private OrthographicCamera camera;
     private Viewport viewport;
+
+    private int portionOfScreen;
+    private int lane1;
+    private int lane2;
+    private int lane3;
+    private int lane4;
+    private int hitLineHeight;
+    List<Integer> positionList;
 
     @Override
     public void show() {
@@ -75,6 +83,21 @@ public class GameLoop implements Screen {
         // useful
         screenWidth = (int) viewport.getWorldWidth();
         screenHeight = (int) viewport.getWorldHeight();
+        portionOfScreen = (int) screenWidth/6;
+        lane1 = portionOfScreen;
+        lane2 = portionOfScreen*2;
+        lane3 = portionOfScreen*3;
+        lane4 = portionOfScreen*4;
+        hitLineHeight = 48;
+
+        // filling the list for drawing notes
+        positionList = new ArrayList<>();
+        positionList.add(lane1);
+        positionList.add(lane2);
+        positionList.add(lane3);
+        positionList.add(lane4);
+
+
     }
 
     @Override
@@ -84,10 +107,17 @@ public class GameLoop implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Render the hitline
+        // render the hitline
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.WHITE); // any color
-        shapeRenderer.rect(0, 50, screenWidth, 3);
+        // horizontal lines
+        shapeRenderer.rect(0, hitLineHeight, screenWidth, 1);
+        // vertical lines
+        shapeRenderer.rect(lane1, 0, 1, screenHeight);
+        shapeRenderer.rect(lane2, 0, 1, screenHeight);
+        shapeRenderer.rect(lane3, 0, 1, screenHeight);
+        shapeRenderer.rect(lane4, 0, 1, screenHeight);
+        shapeRenderer.rect(portionOfScreen*5, 0, 1, screenHeight);
         shapeRenderer.end();
 
         songTime += delta;  // delta = time since last frame
@@ -98,8 +128,7 @@ public class GameLoop implements Screen {
 
 
         // notes
-        noteManager.draw(batch);
-
+        noteManager.draw(batch, positionList);
         // text
         font.draw(batch, displayText, 0, screenHeight);
 

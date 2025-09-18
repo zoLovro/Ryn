@@ -50,7 +50,6 @@ public class GameLoop implements Screen {
     private int lane3;
     private int lane4;
     private int hitLineHeight;
-    List<Integer> positionList;
 
     @Override
     public void show() {
@@ -89,15 +88,6 @@ public class GameLoop implements Screen {
         lane3 = portionOfScreen*3;
         lane4 = portionOfScreen*4;
         hitLineHeight = 48;
-
-        // filling the list for drawing notes
-        positionList = new ArrayList<>();
-        positionList.add(lane1);
-        positionList.add(lane2);
-        positionList.add(lane3);
-        positionList.add(lane4);
-
-
     }
 
     @Override
@@ -128,7 +118,7 @@ public class GameLoop implements Screen {
 
 
         // notes
-        noteManager.draw(batch, positionList);
+        noteManager.draw(batch);
         // text
         font.draw(batch, displayText, 0, screenHeight);
 
@@ -136,7 +126,12 @@ public class GameLoop implements Screen {
         batch.end();
 
         // hit detection
-        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) noteManager.checkHit(songTime);
+        if(Gdx.input.isKeyJustPressed(Input.Keys.L)) noteManager.checkHit(songTime, 0);
+        if(Gdx.input.isKeyJustPressed(Input.Keys.D)) noteManager.checkHit(songTime, 1);
+        if(Gdx.input.isKeyJustPressed(Input.Keys.F)) noteManager.checkHit(songTime, 2);
+        if(Gdx.input.isKeyJustPressed(Input.Keys.J)) noteManager.checkHit(songTime, 3);
+        if(Gdx.input.isKeyJustPressed(Input.Keys.K)) noteManager.checkHit(songTime, 4);
+        if(Gdx.input.isKeyJustPressed(Input.Keys.S)) noteManager.checkHit(songTime, 5);
 
         scoreManager.update(noteManager.getAccuracy(), noteManager.getCombo());
         acc = scoreManager.getAccuracy();

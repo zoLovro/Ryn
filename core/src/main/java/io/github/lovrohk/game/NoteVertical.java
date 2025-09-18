@@ -10,8 +10,8 @@ public class NoteVertical extends Note {
     private int speed = 150;
     private int hitLine = 50;
 
-    public NoteVertical(float time) {
-        super(time);
+    public NoteVertical(float time, int lane) {
+        super(time, lane);
     }
 
     @Override
@@ -21,8 +21,19 @@ public class NoteVertical extends Note {
     }
 
     @Override
-    public void draw(SpriteBatch batch, int xPos) {
-        batch.draw(verticalTexture, xPos, y);
+    public void draw(SpriteBatch batch) {
+        batch.draw(verticalTexture, transformLane(lane), y);
+    }
+
+    private int transformLane(int lane) {
+        int result = switch (lane) {
+            case 1 -> 100;
+            case 2 -> 200;
+            case 3 -> 300;
+            case 4 -> 400;
+            default -> 0;
+        };
+        return result;
     }
 
     public int getHitLine() {

@@ -15,9 +15,8 @@ public class NoteManager {
     List<Note> toRemove = new ArrayList<>();
     int[] accuracy  = new int[]{0, 0, 0};
     int combo = 0;
-    Random rand = new Random();
 
-    
+
 
     // sound stuff
     Sound hitSound = Gdx.audio.newSound(Gdx.files.internal("audio/sounds/hitSound.wav"));
@@ -43,17 +42,13 @@ public class NoteManager {
         }
     }
 
-    public void draw(SpriteBatch batch, List<Integer> positionList) {
+    public void draw(SpriteBatch batch) {
         for (Note note : notes) {
-            /* chooses a random integer (most likely 1-4 since its size is 4 for now) 
-                and then grabs the value of the integer from the list */
-            int randInteger = rand.nextInt(positionList.size());
-            int xPos = positionList.get(randInteger);
-            note.draw(batch, xPos);
+            note.draw(batch);
         }
     }
 
-    public void checkHit(float songTime) {
+    public void checkHit(float songTime, int inputLane) {
         Note closest = null;
         float hit200 = 0.05f;   // perfect
         float hit50  = 0.1f;    // okay
@@ -61,6 +56,7 @@ public class NoteManager {
         float minDiff = Float.MAX_VALUE;
 
         for(Note note : notes) {
+            if (note.getLane() != inputLane) continue;
             float diff = Math.abs(songTime - note.time);
             if(diff < minDiff) { minDiff = diff; closest = note; }
         }
@@ -88,11 +84,16 @@ public class NoteManager {
     public List<Note> fillNotes(FileHandle fileHandle) {
         List<Note> notes1 = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(fileHandle.reader())) {
-            String line = br.readLine();
-            String[] temp = line.split(",");
-            for (String a : temp) {
-                Note note = new NoteVertical(Float.parseFloat(a));
-                notes1.add(note);
+            String line;
+            while ((line = br.readLine()) != null) {  // loop through all lines
+                line = line.trim();
+                if (line.isEmpty()) continue; // skip empty lines
+
+                String[] temp = line.split(",");
+                float time = Float.parseFloat(temp[0].replace("f", "").trim()); // remove "f" if present
+                int lane = Integer.parseInt(temp[1].replace(";", "").trim());   // remove ";" if present
+
+                notes1.add(new NoteVertical(time, lane));
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -9,8 +9,9 @@ public abstract class Note {
     protected int lane;
     protected boolean hit;
 
-    public Note(float time) {
+    public Note(float time, int lane) {
         this.time = time;
+        this.lane = lane;
         this.y = 100; // start position
         this.x = 0; // start position
         this.hit = false;
@@ -20,7 +21,7 @@ public abstract class Note {
     public abstract void update(float delta, float songTime);
 
     // every note must implement its own draw logic
-    public abstract void draw(SpriteBatch batch, int xPos);
+    public abstract void draw(SpriteBatch batch);
 
     // optional: generic hit detection
     public boolean isHit() {
@@ -32,4 +33,5 @@ public abstract class Note {
     }
 
     public float getTime() {return time;}
+    public int getLane() {return lane;}
 }

@@ -53,12 +53,6 @@ public class GameLoop implements Screen {
 
     @Override
     public void show() {
-        // note manager filling
-        noteManager = new NoteManager(temp);
-        FileHandle file = Gdx.files.internal("maps/testMap.txt");
-        notes = noteManager.fillNotes(file);
-        noteManager.setNotes(notes);
-
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
 
@@ -83,11 +77,17 @@ public class GameLoop implements Screen {
         screenWidth = (int) viewport.getWorldWidth();
         screenHeight = (int) viewport.getWorldHeight();
         portionOfScreen = (int) screenWidth/6;
-        lane1 = portionOfScreen;
-        lane2 = portionOfScreen*2;
-        lane3 = portionOfScreen*3;
-        lane4 = portionOfScreen*4;
+        lane1 = 10;
+        lane2 = 85;
+        lane3 = 160;
+        lane4 = 235;
         hitLineHeight = 48;
+
+        // note manager filling
+        noteManager = new NoteManager(temp, scoreManager);
+        FileHandle file = Gdx.files.internal("maps/testMap.txt");
+        notes = noteManager.fillNotes(file);
+        noteManager.setNotes(notes);
     }
 
     @Override
@@ -133,10 +133,10 @@ public class GameLoop implements Screen {
         if(Gdx.input.isKeyJustPressed(Input.Keys.K)) noteManager.checkHit(songTime, 4);
         if(Gdx.input.isKeyJustPressed(Input.Keys.S)) noteManager.checkHit(songTime, 5);
 
-        scoreManager.update(noteManager.getAccuracy(), noteManager.getCombo());
+        scoreManager.update(noteManager.getAccuracy());
         acc = scoreManager.getAccuracy();
         formatted = String.format("%.2f", acc);
-        displayText = "Score: " + scoreManager.getScore() + " Accuracy: " + formatted + " Combo: " + noteManager.getCombo();
+        displayText = "Score: " + scoreManager.getScore() + " Accuracy: " + formatted + " Combo: " + scoreManager.getCombo();
     }
 
     @Override

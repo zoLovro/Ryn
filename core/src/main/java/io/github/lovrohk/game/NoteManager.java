@@ -15,13 +15,15 @@ public class NoteManager {
     List<Note> toRemove = new ArrayList<>();
     int[] accuracy  = new int[]{0, 0, 0};
     int combo = 0;
+    private ScoreManager scoreManager;
 
     // sound stuff
     Sound hitSound = Gdx.audio.newSound(Gdx.files.internal("audio/sounds/hitSound.wav"));
     Sound missSound = Gdx.audio.newSound(Gdx.files.internal("audio/sounds/missSound.mp3"));
 
-    public NoteManager(List<Note> notes) {
+    public NoteManager(List<Note> notes, ScoreManager scoreManager) {
         this.notes = notes;
+        this.scoreManager = scoreManager;
     }
 
 
@@ -62,46 +64,44 @@ public class NoteManager {
         if (closest != null) {
             if (minDiff <= hit200) {
                 closest.hit();
-                accuracy[2]++;  // perfect
+                scoreManager.addCombo();
+                scoreManager.update(accuracy);
                 hitSound.play(0.4f);
-                combo++;
             } else if (minDiff <= hit50) {
                 closest.hit();
-                accuracy[1]++;  // off a bit
+                scoreManager.addCombo();
+                scoreManager.update(accuracy);
                 hitSound.play(0.4f);
-                combo++;
             } else if (minDiff <= missWindow) {
                 closest.hit();
-                accuracy[0]++;  // miss
+                scoreManager.resetCombo();
+                scoreManager.update(accuracy);
                 missSound.play(0.4f);
-                combo = 0;
             }
-        } // need to add songTime + missWindow for automatic misses if player didn't hit
+        }
     }
 
     public List<Note> fillNotes(FileHandle fileHandle) {
         List<Note> notes1 = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(fileHandle.reader())) {
             String line;
-            while ((line = br.readLine()) != null) {  // loop through all lines
+            while ((line = br.readLine()) != null) {
                 line = line.trim();
-                if (line.isEmpty()) continue; // skip empty lines
+                if (line.isEmpty()) continue;
 
                 String[] temp = line.split(",");
-                if(temp[0].toLowerCase().equals("note")) { 
-                    float time = Float.parseFloat(temp[1].replace("f", "").trim()); // remove "f" if present
-                    int lane = Integer.parseInt(temp[2].replace(";", "").trim());   // remove ";" if present
+                if (temp[0].equalsIgnoreCase("note")) {
+                    float time = Float.parseFloat(temp[1].replace("f", "").trim());
+                    int lane = Integer.parseInt(temp[2].replace(";", "").trim());
                     notes1.add(new NoteVertical(time, lane));
                 }
-                else continue;
-            }
-                
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         return notes1;
     }
+
 
     public void setNotes(List<Note> a) {
         notes = a;

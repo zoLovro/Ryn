@@ -2,19 +2,23 @@ package io.github.lovrohk.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class Slider {
-    private float time1;
-    private float time2;
-    private int lane;
-    private float x;
-    private float y;
-    private boolean holding;
-    private boolean hit;
+public abstract class Slider {
+    protected float time1;
+    protected float time2;
+    protected int lane;
+    protected float x;
+    protected float y;
+    protected boolean holding;
+    protected boolean hit;
 
     public Slider(float time1, float time2, int lane) {
         this.time1 = time1;
         this.time2 = time2;
         this.lane = lane;
+        this.y = 100; // start position
+        this.x = 0; // start position
+        this.hit = false;
+        this.holding = false;
     }
 
     // every slider must implement its own update logic
@@ -32,7 +36,7 @@ public class Slider {
         hit = true;
     }
 
-    public void holding()
+    public void holding(){}
 
     public float getTime1() {return time1;}
     public float getTime2() {return time2;}

@@ -11,17 +11,19 @@ import java.util.List;
 import java.util.Random;
 
 public class SliderManager {
-    private List<Note> sliders;
-    List<Note> toRemove = new ArrayList<>();
+    private List<Slider> sliders;
+    List<Slider> toRemove = new ArrayList<>();
     int[] accuracy  = new int[]{0, 0, 0};
+    int combo;
+    private ScoreManager scoreManager;
 
-     // sound stuff
+    // sound stuff
     Sound hitSound = Gdx.audio.newSound(Gdx.files.internal("audio/sounds/hitSound.wav"));
     Sound missSound = Gdx.audio.newSound(Gdx.files.internal("audio/sounds/missSound.mp3"));
 
-
-    public SliderManager(List<Note> sliders) {
+    public SliderManager(List<Slider> sliders, ScoreManager scoreManager) {
         this.sliders = sliders;
+        this.scoreManager = scoreManager;
     }
 
     public void update(float delta, float songTime) {
@@ -47,26 +49,25 @@ public class SliderManager {
     }
 
     public void checkHit(float songTime, int inputLane, float time1, float time2) {
-        
+
     }
 
-    public List<Note> fillNotes(FileHandle fileHandle) {
-        List<Note> sliders1 = new ArrayList<>();
+    public List<Slider> fillSliders(FileHandle fileHandle) {
+        List<Slider> sliders1 = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(fileHandle.reader())) {
             String line;
-            while ((line = br.readLine()) != null) {  // loop through all lines
+            while ((line = br.readLine()) != null) {
                 line = line.trim();
-                if (line.isEmpty()) continue; // skip empty lines
+                if (line.isEmpty()) continue;
 
                 String[] temp = line.split(",");
-                if(temp[0].toLowerCase().equals("slider")) { 
-                    float time = Float.parseFloat(temp[1].replace("f", "").trim()); // remove "f" if present
-                    int lane = Integer.parseInt(temp[2].replace(";", "").trim());   // remove ";" if present
-                    notes1.add(new NoteVertical(time, lane));
+                if (temp[0].equalsIgnoreCase("slider")) {
+                    float time1 = Float.parseFloat(temp[1].replace("f", "").trim());
+                    float time2 = Float.parseFloat(temp[2].replace("f", "").trim());
+                    int lane = Integer.parseInt(temp[3].replace(";", "").trim());
+
+                    sliders1.add(new SliderVertical(time1, time2, lane));
                 }
-                else continue;
-            }
-                
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -74,15 +75,13 @@ public class SliderManager {
         return sliders1;
     }
 
-    public void setNotes(List<Note> a) {
-        notes = a;
+
+    public void setSliders(List<Slider> a) {
+        sliders = a;
     }
 
     public int[] getAccuracy() {
         return accuracy.clone(); // prevents unwanted modification
-    }
-    public int getCombo() {
-        return combo;
     }
     public void addCombo(int c) {
         combo += c;

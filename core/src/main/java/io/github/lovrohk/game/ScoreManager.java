@@ -3,13 +3,14 @@ package io.github.lovrohk.game;
 public class ScoreManager {
     private int score;
     private float accuracy;
+    private int combo;
 
     public ScoreManager() {
         this.score = 0;
         this.accuracy = 100.00f;
     }
 
-    public void update(int[] hits, int combo) {
+    public void update(int[] hits) {
         int miss = hits[0];
         int hit50 = hits[1];
         int hit200 = hits[2];
@@ -17,9 +18,9 @@ public class ScoreManager {
         // update accuracy
         accuracy = calculateAcc(hits) * 100;
 
-        // simple scoring logic (example)
-        score = hit200 * 300 + hit50 * 100 - miss * 50; // adjust as you want
-        score += combo; // or combo multiplier
+        // scoring
+        score = hit200 * 300 + hit50 * 100 - miss * 50;
+        score += combo * 10; // example: combo bonus
     }
 
     private float calculateAcc(int[] hits) {
@@ -31,6 +32,17 @@ public class ScoreManager {
         return accuracy = ((50 * hit50) + (200 * hit200)) / (200f * totalHits);
     }
 
-    public int getScore() {return score;}
-    public float getAccuracy() {return accuracy;}
+    // combo methods
+    public void addCombo() {
+        combo++;
+    }
+
+    public void resetCombo() {
+        combo = 0;
+    }
+
+    // getters
+    public int getCombo() { return combo; }
+    public int getScore() { return score; }
+    public float getAccuracy() { return accuracy; }
 }

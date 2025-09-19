@@ -16,8 +16,6 @@ public class NoteManager {
     int[] accuracy  = new int[]{0, 0, 0};
     int combo = 0;
 
-
-
     // sound stuff
     Sound hitSound = Gdx.audio.newSound(Gdx.files.internal("audio/sounds/hitSound.wav"));
     Sound missSound = Gdx.audio.newSound(Gdx.files.internal("audio/sounds/missSound.mp3"));
@@ -90,10 +88,14 @@ public class NoteManager {
                 if (line.isEmpty()) continue; // skip empty lines
 
                 String[] temp = line.split(",");
-                float time = Float.parseFloat(temp[0].replace("f", "").trim()); // remove "f" if present
-                int lane = Integer.parseInt(temp[1].replace(";", "").trim());   // remove ";" if present
-
-                notes1.add(new NoteVertical(time, lane));
+                if(temp[0].toLowerCase().equals("note")) { 
+                    float time = Float.parseFloat(temp[1].replace("f", "").trim()); // remove "f" if present
+                    int lane = Integer.parseInt(temp[2].replace(";", "").trim());   // remove ";" if present
+                    notes1.add(new NoteVertical(time, lane));
+                }
+                else continue;
+            }
+                
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -110,5 +112,8 @@ public class NoteManager {
     }
     public int getCombo() {
         return combo;
+    }
+    public void addCombo(int c) {
+        combo += c;
     }
 }

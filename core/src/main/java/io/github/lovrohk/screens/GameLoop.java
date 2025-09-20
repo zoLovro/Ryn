@@ -13,10 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import io.github.lovrohk.game.Note;
-import io.github.lovrohk.game.NoteManager;
-import io.github.lovrohk.game.NoteVertical;
-import io.github.lovrohk.game.ScoreManager;
+import io.github.lovrohk.game.*;
 
 import java.io.BufferedReader;
 import java.util.ArrayList;
@@ -25,11 +22,14 @@ import java.util.List;
 /** First screen of the application. Displayed after the application is created. */
 public class GameLoop implements Screen {
     private NoteManager noteManager;
+    private SliderManager sliderManager;
     private float songTime;
     private SpriteBatch batch;
     ShapeRenderer shapeRenderer;
     List<Note> notes;
-    List<Note> temp = new ArrayList<>();
+    List<Note> tempNote = new ArrayList<>();
+    List<Slider> tempSlider = new ArrayList<>();
+    List<Slider> sliders;
 
     ScoreManager scoreManager;
     BitmapFont font;
@@ -84,10 +84,15 @@ public class GameLoop implements Screen {
         hitLineHeight = 48;
 
         // note manager filling
-        noteManager = new NoteManager(temp, scoreManager);
+        noteManager = new NoteManager(tempNote, scoreManager);
         FileHandle file = Gdx.files.internal("maps/testMap.txt");
         notes = noteManager.fillNotes(file);
         noteManager.setNotes(notes);
+
+        // slider manager filling
+        sliderManager = new SliderManager(tempSlider, scoreManager);
+        sliders = sliderManager.fillSliders(file);
+        sliderManager.setSliders(sliders);
     }
 
     @Override
@@ -119,6 +124,7 @@ public class GameLoop implements Screen {
 
         // notes
         noteManager.draw(batch);
+        sliderManager.draw(batch, songTime);
         // text
         font.draw(batch, displayText, 0, screenHeight);
 
@@ -126,12 +132,12 @@ public class GameLoop implements Screen {
         batch.end();
 
         // hit detection
-        if(Gdx.input.isKeyJustPressed(Input.Keys.L)) noteManager.checkHit(songTime, 0);
+        if(Gdx.input.isKeyJustPressed(Input.Keys.S)) noteManager.checkHit(songTime, 0);
         if(Gdx.input.isKeyJustPressed(Input.Keys.D)) noteManager.checkHit(songTime, 1);
         if(Gdx.input.isKeyJustPressed(Input.Keys.F)) noteManager.checkHit(songTime, 2);
         if(Gdx.input.isKeyJustPressed(Input.Keys.J)) noteManager.checkHit(songTime, 3);
         if(Gdx.input.isKeyJustPressed(Input.Keys.K)) noteManager.checkHit(songTime, 4);
-        if(Gdx.input.isKeyJustPressed(Input.Keys.S)) noteManager.checkHit(songTime, 5);
+        if(Gdx.input.isKeyJustPressed(Input.Keys.L)) noteManager.checkHit(songTime, 5);
 
         scoreManager.update(noteManager.getAccuracy());
         acc = scoreManager.getAccuracy();

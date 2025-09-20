@@ -42,9 +42,9 @@ public class SliderManager {
         }
     }
 
-    public void draw(SpriteBatch batch) {
+    public void draw(SpriteBatch batch, float currentSongTime) {
         for (Slider slider : sliders) {
-            slider.draw(batch);
+            slider.draw(batch, currentSongTime);
         }
     }
 

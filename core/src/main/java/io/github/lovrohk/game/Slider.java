@@ -25,7 +25,7 @@ public abstract class Slider {
     public abstract void update(float delta, float songTime);
 
     // every note must implement its own draw logic
-    public abstract void draw(SpriteBatch batch);
+    public abstract void draw(SpriteBatch batch, float songTime);
 
     // optional: generic hit detection
     public boolean isHit() {

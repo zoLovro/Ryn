@@ -28,12 +28,12 @@ public class NoteVertical extends Note {
     private int transformLane(int lane) {
         int result = switch (lane) {
             case 0 -> 10;
-            case 1 -> 85;
-            case 2 -> 160;
-            case 3 -> 235;
-            case 4 -> 310;
-            case 5 -> 385;
-            default -> 10;
+            case 1 -> 90;
+            case 2 -> 170;
+            case 3 -> 250;
+            case 4 -> 330;
+            case 5 -> 410;
+            default -> 0;
         };
         return result;
     }

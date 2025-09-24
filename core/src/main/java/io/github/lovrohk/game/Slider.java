@@ -36,7 +36,17 @@ public abstract class Slider {
         hit = true;
     }
 
-    public void holding(){}
+    public void holding(){ holding = true; }
+    public boolean isHolding() {return holding;}
+
+    public void startHolding() {
+        holding = true;
+        hit = true;
+    }
+
+    public void stopHolding() {
+        holding = false;
+    }
 
     public float getTime1() {return time1;}
     public float getTime2() {return time2;}

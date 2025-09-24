@@ -22,17 +22,31 @@ public class SliderVertical extends Slider{
 
     @Override
     public void draw(SpriteBatch batch, float currentSongTime) {
-        float headY = (time1 - currentSongTime) * speed + hitLine;
-        float tailY = (time2 - currentSongTime) * speed + hitLine;
+        if (currentSongTime > getTime2()) return; // slider is done
 
-        // Body of slider (a stretched texture)
+        float headY = (getTime1() - currentSongTime) * speed + hitLine;
+        float tailY = (getTime2() - currentSongTime) * speed + hitLine;
+
+        if (isHolding()) {
+            headY = hitLine; // lock head at the hit line
+        }
+
         float height = tailY - headY;
-        batch.draw(verticalTexture, transformLane(lane), headY, 50, height);
+        if (height <= 0) return; // no body left → disappear immediately
 
-        //  separate textures for head and tail
-        batch.draw(verticalTexture, transformLane(lane), headY);
-        batch.draw(verticalTexture, transformLane(lane), tailY);
+        // Draw the body
+        batch.draw(verticalTexture, transformLane(getLane()), headY, 50, height);
+
+        // Draw the head only if not holding
+        if (!isHolding()) {
+            batch.draw(verticalTexture, transformLane(getLane()), headY);
+        }
+
+        // Always draw the tail until slider is complete
+        batch.draw(verticalTexture, transformLane(getLane()), tailY);
     }
+
+
 
     private int transformLane(int lane) {
         int result = switch (lane) {

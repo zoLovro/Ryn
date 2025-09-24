@@ -117,6 +117,7 @@ public class GameLoop implements Screen {
 
         songTime += delta;  // delta = time since last frame
         noteManager.update(delta, songTime);
+        sliderManager.update(delta, songTime);
 
         // drawing everything
         batch.begin();

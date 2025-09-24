@@ -30,17 +30,42 @@ public class SliderManager {
         for (Slider slider : sliders) {
             slider.update(delta, songTime);
 
-            if(slider.isHit()) {
-                // implement logic for what happens if slider is hit
+            // ✅ Case 1: Finished holding correctly → slider done
+            if (slider.isHolding() && songTime >= slider.getTime2()) {
+                slider.stopHolding();   // you need this in Slider
+                scoreManager.addCombo();
+                accuracy[2]++;          // treat as "200" / perfect finish
+                scoreManager.update(accuracy);
+                hitSound.play(0.4f);
+                toRemove.add(slider);
+                continue; // done with this slider
+            }
+
+            // ✅ Case 2: Slider passed without being held → miss
+            if (!slider.isHolding() && !slider.isHit() && songTime > slider.getTime2()) {
+                slider.hit();
+                scoreManager.resetCombo();
+                accuracy[0]++;          // miss
+                scoreManager.update(accuracy);
+                missSound.play(0.4f);
+                toRemove.add(slider);
                 continue;
+            }
+
+            // ✅ Optional Case 3: If you let go early (released before tail)
+            if (slider.isHolding() && songTime < slider.getTime2()) {
+                // Here you could detect if the player released the key too soon.
+                // For now, just leave it; you’ll need input handling for "release".
             }
         }
 
-        if(!toRemove.isEmpty()) {
+        if (!toRemove.isEmpty()) {
             sliders.removeAll(toRemove);
             toRemove.clear();
         }
     }
+
+
 
     public void draw(SpriteBatch batch, float currentSongTime) {
         for (Slider slider : sliders) {
@@ -48,7 +73,43 @@ public class SliderManager {
         }
     }
 
-    public void checkHit(float songTime, int inputLane, float time1, float time2) {
+    public void checkHit(float songTime, int inputLane) {
+        Slider closest = null;
+        float hit200 = 0.05f;   // perfect
+        float hit50  = 0.1f;    // okay
+        float missWindow = 0.5f; // miss
+        float minDiff = Float.MAX_VALUE;
+
+        for(Slider slider : sliders) {
+            if (slider.getLane() != inputLane) continue;
+            float diff = Math.abs(songTime - slider.time1);
+            if(diff < minDiff) { minDiff = diff; closest = slider; }
+        }
+
+        if (closest != null) {
+            if (minDiff <= hit200) {
+                // good head hit
+                closest.startHolding();          // begin holding
+                scoreManager.addCombo();
+                accuracy[2]++;                   // count 200
+                scoreManager.update(accuracy);
+                hitSound.play(0.4f);
+
+            } else if (minDiff <= hit50) {
+                closest.startHolding();          // begin holding
+                scoreManager.addCombo();
+                accuracy[1]++;                   // count 50
+                scoreManager.update(accuracy);
+                hitSound.play(0.4f);
+
+            } else if (minDiff <= missWindow) {
+                closest.hit();                   // fail instantly
+                scoreManager.resetCombo();
+                accuracy[0]++;                   // miss
+                scoreManager.update(accuracy);
+                missSound.play(0.4f);
+            }
+        }
 
     }
 

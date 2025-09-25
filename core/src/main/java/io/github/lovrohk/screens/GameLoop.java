@@ -22,14 +22,11 @@ import java.util.List;
 /** First screen of the application. Displayed after the application is created. */
 public class GameLoop implements Screen {
     private NoteManager noteManager;
-    private SliderManager sliderManager;
     private float songTime;
     private SpriteBatch batch;
     ShapeRenderer shapeRenderer;
     List<Note> notes;
     List<Note> tempNote = new ArrayList<>();
-    List<Slider> tempSlider = new ArrayList<>();
-    List<Slider> sliders;
 
     ScoreManager scoreManager;
     BitmapFont font;
@@ -88,11 +85,6 @@ public class GameLoop implements Screen {
         FileHandle file = Gdx.files.internal("maps/testMap.txt");
         notes = noteManager.fillNotes(file);
         noteManager.setNotes(notes);
-
-        // slider manager filling
-        sliderManager = new SliderManager(tempSlider, scoreManager);
-        sliders = sliderManager.fillSliders(file);
-        sliderManager.setSliders(sliders);
     }
 
     @Override
@@ -117,7 +109,6 @@ public class GameLoop implements Screen {
 
         songTime += delta;  // delta = time since last frame
         noteManager.update(delta, songTime);
-        sliderManager.update(delta, songTime);
 
         // drawing everything
         batch.begin();
@@ -125,7 +116,6 @@ public class GameLoop implements Screen {
 
         // notes
         noteManager.draw(batch);
-        sliderManager.draw(batch, songTime);
         // text
         font.draw(batch, displayText, 0, screenHeight);
 

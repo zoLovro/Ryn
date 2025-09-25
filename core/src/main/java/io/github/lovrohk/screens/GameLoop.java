@@ -8,6 +8,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -15,7 +16,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.lovrohk.game.*;
 
-import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +27,8 @@ public class GameLoop implements Screen {
     ShapeRenderer shapeRenderer;
     List<Note> notes;
     List<Note> tempNote = new ArrayList<>();
+
+    Texture emptyNoteDown;
 
     ScoreManager scoreManager;
     BitmapFont font;
@@ -66,7 +68,7 @@ public class GameLoop implements Screen {
 
         // viewport and camera for window resize
         camera = new OrthographicCamera();
-        viewport = new FitViewport(800, 600, camera); // 800x600 is your "virtual" resolution
+        viewport = new FitViewport(1920, 1080, camera); //
         viewport.apply();
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
 
@@ -85,6 +87,9 @@ public class GameLoop implements Screen {
         FileHandle file = Gdx.files.internal("maps/testMap.txt");
         notes = noteManager.fillNotes(file);
         noteManager.setNotes(notes);
+
+        // other textures
+        emptyNoteDown = new Texture(Gdx.files.internal("hitline/emptyHit.png"));
     }
 
     @Override
@@ -94,18 +99,6 @@ public class GameLoop implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // render the hitline
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(Color.WHITE); // any color
-        // horizontal lines
-        shapeRenderer.rect(0, hitLineHeight, screenWidth, 1);
-        // vertical lines
-        shapeRenderer.rect(lane1, 0, 1, screenHeight);
-        shapeRenderer.rect(lane2, 0, 1, screenHeight);
-        shapeRenderer.rect(lane3, 0, 1, screenHeight);
-        shapeRenderer.rect(lane4, 0, 1, screenHeight);
-        shapeRenderer.rect(portionOfScreen*5, 0, 1, screenHeight);
-        shapeRenderer.end();
 
         songTime += delta;  // delta = time since last frame
         noteManager.update(delta, songTime);
@@ -119,7 +112,11 @@ public class GameLoop implements Screen {
         // text
         font.draw(batch, displayText, 0, screenHeight);
 
-
+        // hitline stuff
+        batch.draw(emptyNoteDown, 802, hitLineHeight, 64, 64);
+        batch.draw(emptyNoteDown, 886, hitLineHeight, 64, 64);
+        batch.draw(emptyNoteDown, 970, hitLineHeight, 64, 64);
+        batch.draw(emptyNoteDown, 1054, hitLineHeight, 64, 64);
         batch.end();
 
         // hit detection

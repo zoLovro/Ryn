@@ -2,5 +2,7 @@
 audio/songs/testSong.mp3
 audio/sounds/hitSound.wav
 audio/sounds/missSound.mp3
+hitline/emptyHit.png
 maps/testMap.txt
 notes/verticalNote.png
+notes/verticalNoteUpdated.png

@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class NoteVertical extends Note {
-    Texture verticalTexture = new Texture(Gdx.files.internal("notes/verticalNote.png"));
+    Texture verticalTexture = new Texture(Gdx.files.internal("notes/verticalNoteUpdated.png"));
     private float distanceFromHitLine;
     private int speed = 150;
     private int hitLine = 50;
@@ -27,12 +27,10 @@ public class NoteVertical extends Note {
 
     private int transformLane(int lane) {
         int result = switch (lane) {
-            case 0 -> 10;
-            case 1 -> 90;
-            case 2 -> 170;
-            case 3 -> 250;
-            case 4 -> 330;
-            case 5 -> 410;
+            case 1 -> 802;
+            case 2 -> 886;
+            case 3 -> 970;
+            case 4 -> 1054;
             default -> 0;
         };
         return result;

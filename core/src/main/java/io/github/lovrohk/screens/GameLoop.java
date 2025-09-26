@@ -49,6 +49,8 @@ public class GameLoop implements Screen {
     private int lane3;
     private int lane4;
     private int hitLineHeight;
+    
+    private boolean isPaused;
 
     @Override
     public void show() {
@@ -90,47 +92,54 @@ public class GameLoop implements Screen {
 
         // other textures
         emptyNoteDown = new Texture(Gdx.files.internal("hitline/emptyHit.png"));
+
+        // screen management
+        isPaused = false;
     }
 
     @Override
     public void render(float delta) {
-        camera.update();
-        batch.setProjectionMatrix(camera.combined);
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        if(!isPaused) {
+            camera.update();
+            batch.setProjectionMatrix(camera.combined);
+            Gdx.gl.glClearColor(0, 0, 0, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
-        songTime += delta;  // delta = time since last frame
-        noteManager.update(delta, songTime);
+            songTime += delta;  // delta = time since last frame
+            noteManager.update(delta, songTime);
 
-        // drawing everything
-        batch.begin();
+            // drawing everything
+            batch.begin();
 
 
-        // notes
-        noteManager.draw(batch);
-        // text
-        font.draw(batch, displayText, 0, screenHeight);
+            // notes
+            noteManager.draw(batch);
+            // text
+            font.draw(batch, displayText, 0, screenHeight);
 
-        // hitline stuff
-        batch.draw(emptyNoteDown, 802, hitLineHeight, 64, 64);
-        batch.draw(emptyNoteDown, 886, hitLineHeight, 64, 64);
-        batch.draw(emptyNoteDown, 970, hitLineHeight, 64, 64);
-        batch.draw(emptyNoteDown, 1054, hitLineHeight, 64, 64);
-        batch.end();
+            // hitline stuff
+            batch.draw(emptyNoteDown, 802, hitLineHeight, 64, 64);
+            batch.draw(emptyNoteDown, 886, hitLineHeight, 64, 64);
+            batch.draw(emptyNoteDown, 970, hitLineHeight, 64, 64);
+            batch.draw(emptyNoteDown, 1054, hitLineHeight, 64, 64);
+            batch.end();
 
-        // hit detection
-        if(Gdx.input.isKeyJustPressed(Input.Keys.S)) noteManager.checkHit(songTime, 0);
-        if(Gdx.input.isKeyJustPressed(Input.Keys.D)) noteManager.checkHit(songTime, 1);
-        if(Gdx.input.isKeyJustPressed(Input.Keys.F)) noteManager.checkHit(songTime, 2);
-        if(Gdx.input.isKeyJustPressed(Input.Keys.J)) noteManager.checkHit(songTime, 3);
-        if(Gdx.input.isKeyJustPressed(Input.Keys.K)) noteManager.checkHit(songTime, 4);
-        if(Gdx.input.isKeyJustPressed(Input.Keys.L)) noteManager.checkHit(songTime, 5);
+            // hit detection
+            if(Gdx.input.isKeyJustPressed(Input.Keys.D)) noteManager.checkHit(songTime, 1);
+            if(Gdx.input.isKeyJustPressed(Input.Keys.F)) noteManager.checkHit(songTime, 2);
+            if(Gdx.input.isKeyJustPressed(Input.Keys.J)) noteManager.checkHit(songTime, 3);
+            if(Gdx.input.isKeyJustPressed(Input.Keys.K)) noteManager.checkHit(songTime, 4);
 
-        scoreManager.update(noteManager.getAccuracy());
-        acc = scoreManager.getAccuracy();
-        formatted = String.format("%.2f", acc);
-        displayText = "Score: " + scoreManager.getScore() + " Accuracy: " + formatted + " Combo: " + scoreManager.getCombo();
+            if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) pause();
+
+            scoreManager.update(noteManager.getAccuracy());
+            acc = scoreManager.getAccuracy();
+            formatted = String.format("%.2f", acc);
+            displayText = "Score: " + scoreManager.getScore() + " Accuracy: " + formatted + " Combo: " + scoreManager.getCombo();
+        } else {
+            if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) resume();
+        }
     }
 
     @Override
@@ -143,11 +152,18 @@ public class GameLoop implements Screen {
     @Override
     public void pause() {
         // Invoked when your application is paused.
+        isPaused = true;
+        song.pause();
+
+
     }
 
     @Override
     public void resume() {
         // Invoked when your application is resumed after pause.
+        isPaused = false;
+        song.play();
+
     }
 
     @Override
@@ -161,5 +177,11 @@ public class GameLoop implements Screen {
         // Destroy screen's assets here.
         if (song != null) song.dispose();
         batch.dispose();
+    }
+
+    private void renderPauseScreen() {
+        batch.begin();
+        
+        batch.end();
     }
 }

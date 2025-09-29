@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class NoteVertical extends Note {
     Texture verticalTexture = new Texture(Gdx.files.internal("notes/verticalNoteUpdated.png"));
     private float distanceFromHitLine;
-    private int speed = 150;
+    private int speed = 350;
     private int hitLine = 50;
 
     public NoteVertical(float time, int lane) {

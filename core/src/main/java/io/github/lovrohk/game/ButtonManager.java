@@ -1,5 +1,6 @@
 package io.github.lovrohk.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Texture;
 
@@ -18,6 +19,17 @@ public class ButtonManager {
         ExitButton exitButton = new ExitButton(posX, posY);
         batch.draw(exitButton.getTexture(), posX, posY);
     }
+
+    // getters
+    ContinueButton tempContBut = new ContinueButton(0, 0);
+    RestartButton tempRestartButton = new RestartButton(0, 0);
+    ExitButton tempExitButton = new ExitButton(0, 0);
+    public int getContinueTextureWidth() {return tempContBut.getTextureWidth();}
+    public int getContinueTextureHeight() {return tempContBut.getTextureHeight();}
+    public int getRestartTextureWidth() {return tempRestartButton.getTextureWidth();}
+    public int getRestartTextureHeight() {return tempRestartButton.getTextureHeight();}
+    public int getExitTextureWidth() {return tempExitButton.getTextureWidth();}
+    public int getExitTextureHeight() {return tempExitButton.getTextureHeight();}
 
     // button classes
     private class ContinueButton {

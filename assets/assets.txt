@@ -2,7 +2,12 @@
 audio/songs/testSong.mp3
 audio/sounds/hitSound.wav
 audio/sounds/missSound.mp3
+buttons/continueButtonTexture.png
+buttons/exitButtonTexture.png
+buttons/restartButtonTexture.png
 hitline/emptyHit.png
+hitline/fullHit.png
 maps/testMap.txt
 notes/verticalNote.png
 notes/verticalNoteUpdated.png
+screenTextures/pauseScreen.png

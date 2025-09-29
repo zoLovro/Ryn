@@ -50,8 +50,8 @@ public class NoteManager {
 
     public void checkHit(float songTime, int inputLane) {
         Note closest = null;
-        float hit200 = 0.05f;   // perfect
-        float hit50  = 0.1f;    // okay
+        float hit200 = 0.1f;   // perfect
+        float hit50  = 0.15f;    // okay
         float missWindow = 0.5f; // miss
         float minDiff = Float.MAX_VALUE;
 
@@ -64,19 +64,22 @@ public class NoteManager {
         if (closest != null) {
             if (minDiff <= hit200) {
                 closest.hit();
+                accuracy[2] += 1;
                 scoreManager.addCombo();
                 scoreManager.update(accuracy);
-                hitSound.play(0.4f);
+                hitSound.play(0.1f);
             } else if (minDiff <= hit50) {
                 closest.hit();
+                accuracy[1] += 1;
                 scoreManager.addCombo();
                 scoreManager.update(accuracy);
-                hitSound.play(0.4f);
+                hitSound.play(0.1f);
             } else if (minDiff <= missWindow) {
                 closest.hit();
+                accuracy[0] += 1;
                 scoreManager.resetCombo();
                 scoreManager.update(accuracy);
-                missSound.play(0.4f);
+                missSound.play(0.1f);
             }
         }
     }

@@ -59,6 +59,7 @@ public class GameLoop implements Screen {
     private int hitLineHeight;
 
     private boolean isPaused;
+    private boolean failed;
     Texture pauseScreenTexture;
     ButtonManager buttonManager;
     Rectangle continueButtonRect;
@@ -110,6 +111,7 @@ public class GameLoop implements Screen {
 
         // screen management
         isPaused = false;
+        failed = false;
 
         // pause screen
         pauseScreenTexture = new Texture(Gdx.files.internal("screenTextures/pauseScreen.png"));
@@ -117,11 +119,12 @@ public class GameLoop implements Screen {
         continueButtonRect = new Rectangle(17, 220, buttonManager.getContinueTextureWidth(), buttonManager.getContinueTextureHeight());
         restartButtonRect = new Rectangle(17, 120, buttonManager.getRestartTextureWidth(), buttonManager.getRestartTextureHeight());
         exitButtonRect = new Rectangle(17, 20, buttonManager.getExitTextureWidth(), buttonManager.getExitTextureHeight());
+
     }
 
     @Override
     public void render(float delta) {
-        if(!isPaused) {
+        if(!isPaused && !failed) {
             camera.update();
             batch.setProjectionMatrix(camera.combined);
             Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -137,7 +140,7 @@ public class GameLoop implements Screen {
                 // notes
                 noteManager.draw(batch);
                 // text
-                font.draw(batch, displayText, 0, screenHeight);
+                font.draw(batch, displayText, 0, screenHeight - 30);
 
                 // hitline stuff
                 emptyNoteTexture1 = Gdx.input.isKeyPressed(Input.Keys.D)
@@ -169,15 +172,32 @@ public class GameLoop implements Screen {
             if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) pause();
 
             scoreManager.update(noteManager.getAccuracy());
-
             acc = scoreManager.getAccuracy();
             if (Float.isNaN(acc)) {
                 acc = 100f;
             }
-
             formatted = String.format("%.2f", acc);
+
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(1, 1, 1, 1);
+            shapeRenderer.rect(5, screenHeight - 20, noteManager.getHealthbarManager().getHealth() * 5, 15);
+            shapeRenderer.end();
+
             displayText = "Score: " + scoreManager.getScore() + " Accuracy: " + formatted + "%" + " Combo: " + scoreManager.getCombo();
-        } else {
+
+            if(noteManager.getHealthbarManager().getHealth() <= 0) failed = true;
+        }
+        else if(failed) {
+            pause();
+            mouseX = Gdx.input.getX();
+            mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
+            renderFailScreen();
+            if(Gdx.input.isKeyJustPressed(Input.Keys.R)) {restart(); resume(); failed = false;}
+
+            if(restartButtonRect.contains(mouseX, mouseY) && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {restart(); resume(); failed = false;}
+            if(exitButtonRect.contains(mouseX, mouseY) && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {exit();}
+        }
+        else if(isPaused) {
             // pause screen
             mouseX = Gdx.input.getX();
             mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
@@ -196,6 +216,7 @@ public class GameLoop implements Screen {
         // Resize your screen here. The parameters represent the new window size.
         viewport.update(width, height);
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
+        shapeRenderer.setProjectionMatrix(camera.combined);
     }
 
     @Override
@@ -263,6 +284,16 @@ public class GameLoop implements Screen {
         continueButtonRect = new Rectangle(17, 220, buttonManager.getContinueTextureWidth(), buttonManager.getContinueTextureHeight());
         restartButtonRect = new Rectangle(17, 120, buttonManager.getRestartTextureWidth(), buttonManager.getRestartTextureHeight());
         exitButtonRect = new Rectangle(17, 20, buttonManager.getExitTextureWidth(), buttonManager.getExitTextureHeight());
+    }
+
+    private void renderFailScreen() {
+        batch.begin();
+
+        batch.draw(pauseScreenTexture, 0, 0, 1920, 1080);
+        buttonManager.drawRestartButton(17, 120, batch);
+        buttonManager.drawExitButton(17, 20, batch);
+
+        batch.end();
     }
 
     private void exit() {

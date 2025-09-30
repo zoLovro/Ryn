@@ -17,6 +17,9 @@ public class NoteManager {
     int combo = 0;
     private ScoreManager scoreManager;
 
+    // health (in the future every map will hold the HPstat in the map file)
+    HealthbarManager healthbarManager = new HealthbarManager(5);
+
     // sound stuff
     Sound hitSound = Gdx.audio.newSound(Gdx.files.internal("audio/sounds/hitSound.wav"));
     Sound missSound = Gdx.audio.newSound(Gdx.files.internal("audio/sounds/missSound.mp3"));
@@ -40,6 +43,8 @@ public class NoteManager {
             notes.removeAll(toRemove);
             toRemove.clear();
         }
+
+        healthbarManager.healthDraw();
     }
 
     public void draw(SpriteBatch batch) {
@@ -67,18 +72,21 @@ public class NoteManager {
                 accuracy[2] += 1;
                 scoreManager.addCombo();
                 scoreManager.update(accuracy);
+                healthbarManager.hit200Health();
                 hitSound.play(0.1f);
             } else if (minDiff <= hit50) {
                 closest.hit();
                 accuracy[1] += 1;
                 scoreManager.addCombo();
                 scoreManager.update(accuracy);
+                healthbarManager.hit50Health();
                 hitSound.play(0.1f);
             } else if (minDiff <= missWindow) {
                 closest.hit();
                 accuracy[0] += 1;
                 scoreManager.resetCombo();
                 scoreManager.update(accuracy);
+                healthbarManager.missHealth();
                 missSound.play(0.1f);
             }
         }
@@ -113,10 +121,7 @@ public class NoteManager {
     public int[] getAccuracy() {
         return accuracy.clone(); // prevents unwanted modification
     }
-    public int getCombo() {
-        return combo;
-    }
-    public void addCombo(int c) {
-        combo += c;
+    public HealthbarManager getHealthbarManager() {
+        return healthbarManager;
     }
 }

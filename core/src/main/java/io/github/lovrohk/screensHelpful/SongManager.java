@@ -31,4 +31,8 @@ public class SongManager {
             }
         }
     }
+
+    public ArrayList<Song> getSongs() {
+        return songs;
+    }
 }

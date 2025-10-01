@@ -1,12 +1,19 @@
 package io.github.lovrohk.screens;
 
 import com.badlogic.gdx.Screen;
+import io.github.lovrohk.screensHelpful.SongManager;
 
 /** First screen of the application. Displayed after the application is created. */
 public class SongSelect implements Screen {
+    SongManager songManager;
+
     @Override
     public void show() {
-        // Prepare your screen here.
+        // Preparing the song manager
+        songManager = new SongManager();
+        
+
+        // preparing the ui
 
     }
 

@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.lovrohk.game.*;
+import io.github.lovrohk.screensHelpful.Song;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ public class GameLoop implements Screen {
     ShapeRenderer shapeRenderer;
     List<Note> notes;
     List<Note> tempNote = new ArrayList<>();
+    FileHandle file;
 
     Texture emptyNoteDown;
     Texture fullNoteDown;
@@ -66,13 +68,17 @@ public class GameLoop implements Screen {
     Rectangle restartButtonRect;
     Rectangle exitButtonRect;
 
+    public GameLoop(Song selectedSong) {
+        this.song = Gdx.audio.newMusic(Gdx.files.internal(selectedSong.getAudioFile()));
+        this.file = Gdx.files.internal(selectedSong.getNoteFile());
+    }
+
     @Override
     public void show() {
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
 
         // Playing music :D
-        song = Gdx.audio.newMusic(Gdx.files.internal("maps/liella_nonfiction/nonfiction.mp3"));
         song.setVolume(0.2f);
         song.setLooping(false);
         song.play();
@@ -101,7 +107,6 @@ public class GameLoop implements Screen {
 
         // note manager filling
         noteManager = new NoteManager(tempNote, scoreManager);
-        FileHandle file = Gdx.files.internal("maps/liella_nonfiction/nonfiction.txt");
         notes = noteManager.fillNotes(file);
         noteManager.setNotes(notes);
 

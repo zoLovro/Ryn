@@ -46,4 +46,39 @@ dependencies {
   }
 }
 
+tasks.register("generateMapIndex") {
+  def mapsDir = file("../assets/maps")
+  def indexFile = new File(mapsDir, "index.json")
+
+  doLast {
+    if (!mapsDir.exists() || !mapsDir.isDirectory()) {
+      println "WARNING: maps folder not found: ${mapsDir.absolutePath}"
+      return
+    }
+
+    def mapFolders = []
+    mapsDir.eachDir { dir ->
+      mapFolders << dir.name
+    }
+
+    indexFile.text = groovy.json.JsonOutput.prettyPrint(
+      groovy.json.JsonOutput.toJson([maps: mapFolders])
+    )
+    println "Generated index.json with ${mapFolders.size()} maps"
+  }
+}
+
+
+tasks.named("run").configure {
+  doFirst {
+    copy {
+      from(project(":core").file("assets"))
+      into(file("assets"))
+    }
+  }
+}
+
+
+
+
 // Keep the rest of your desktop-specific tasks (jar, jarMac/Linux/Win, construo, etc.) as-is

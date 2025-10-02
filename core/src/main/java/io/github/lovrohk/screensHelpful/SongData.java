@@ -8,4 +8,5 @@ public class SongData {
     public int bpm;
     public String audio;
     public String background;
+    public String noteFile;
 }

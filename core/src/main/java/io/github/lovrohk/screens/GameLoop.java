@@ -25,6 +25,7 @@ import java.util.List;
 /** First screen of the application. Displayed after the application is created. */
 public class GameLoop implements Screen {
     private final Main game;
+    private Song selectedSong;
 
     protected NoteManager noteManager;
     protected float songTime;
@@ -71,10 +72,13 @@ public class GameLoop implements Screen {
     Rectangle restartButtonRect;
     Rectangle exitButtonRect;
 
+    Texture bgTexture;
+
     public GameLoop(Song selectedSong, Main game) {
         this.song = Gdx.audio.newMusic(Gdx.files.internal(selectedSong.getAudioFile()));
         this.file = Gdx.files.internal(selectedSong.getNoteFile());
         this.game = game;
+        this.selectedSong = selectedSong;
     }
 
     @Override
@@ -129,6 +133,8 @@ public class GameLoop implements Screen {
         restartButtonRect = new Rectangle(17, 120, buttonManager.getRestartTextureWidth(), buttonManager.getRestartTextureHeight());
         exitButtonRect = new Rectangle(17, 20, buttonManager.getExitTextureWidth(), buttonManager.getExitTextureHeight());
 
+        // background
+        bgTexture = new Texture(Gdx.files.internal(selectedSong.getBackgroundFile()));
     }
 
     @Override
@@ -136,15 +142,16 @@ public class GameLoop implements Screen {
         if(!isPaused && !failed) {
             camera.update();
             batch.setProjectionMatrix(camera.combined);
-            Gdx.gl.glClearColor(0, 0, 0, 1);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
             songTime += delta;  // delta = time since last frame
             noteManager.update(delta, songTime);
 
             // drawing everything
             batch.begin();
-
+                // background
+                batch.setColor(0.6f, 0.6f, 0.6f, 1f);
+                batch.draw(bgTexture, 0, 0, screenWidth, screenHeight);
+                batch.setColor(Color.WHITE);
 
                 // notes
                 noteManager.draw(batch);

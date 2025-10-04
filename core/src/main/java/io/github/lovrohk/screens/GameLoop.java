@@ -268,9 +268,6 @@ public class GameLoop implements Screen {
     private void restart() {
         song.stop();
         songTime = 0f;
-
-        // Playing music :D
-        song = Gdx.audio.newMusic(Gdx.files.internal("audio/songs/testSong.mp3"));
         song.setVolume(0.2f);
         song.setLooping(false);
         song.play();
@@ -280,7 +277,6 @@ public class GameLoop implements Screen {
 
         // note manager filling
         noteManager = new NoteManager(tempNote, scoreManager);
-        FileHandle file = Gdx.files.internal("maps/testMap.txt");
         notes = noteManager.fillNotes(file);
         noteManager.setNotes(notes);
 

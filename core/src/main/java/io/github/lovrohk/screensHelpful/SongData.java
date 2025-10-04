@@ -7,6 +7,7 @@ public class SongData {
     public String artist;
     public int bpm;
     public String audio;
+    public String audioTrimmed;
     public String background;
     public String noteFile;
 }

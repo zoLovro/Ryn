@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import io.github.lovrohk.Main;
 import io.github.lovrohk.game.*;
 import io.github.lovrohk.screensHelpful.Song;
 
@@ -23,9 +24,11 @@ import java.util.List;
 
 /** First screen of the application. Displayed after the application is created. */
 public class GameLoop implements Screen {
-    private NoteManager noteManager;
-    private float songTime;
-    private SpriteBatch batch;
+    private final Main game;
+
+    protected NoteManager noteManager;
+    protected float songTime;
+    protected SpriteBatch batch;
     ShapeRenderer shapeRenderer;
     List<Note> notes;
     List<Note> tempNote = new ArrayList<>();
@@ -46,31 +49,32 @@ public class GameLoop implements Screen {
     float acc;
     String formatted;
 
-    private Music song;
+    protected Music song;
 
-    private int screenWidth;
-    private int screenHeight;
-    private OrthographicCamera camera;
-    private Viewport viewport;
+    protected int screenWidth;
+    protected int screenHeight;
+    protected OrthographicCamera camera;
+    protected Viewport viewport;
 
-    private int portionOfScreen;
-    private int lane1;
-    private int lane2;
-    private int lane3;
-    private int lane4;
-    private int hitLineHeight;
+    protected int portionOfScreen;
+    protected int lane1;
+    protected int lane2;
+    protected int lane3;
+    protected int lane4;
+    protected int hitLineHeight;
 
-    private boolean isPaused;
-    private boolean failed;
+    protected boolean isPaused;
+    protected boolean failed;
     Texture pauseScreenTexture;
     ButtonManager buttonManager;
     Rectangle continueButtonRect;
     Rectangle restartButtonRect;
     Rectangle exitButtonRect;
 
-    public GameLoop(Song selectedSong) {
+    public GameLoop(Song selectedSong, Main game) {
         this.song = Gdx.audio.newMusic(Gdx.files.internal(selectedSong.getAudioFile()));
         this.file = Gdx.files.internal(selectedSong.getNoteFile());
+        this.game = game;
     }
 
     @Override
@@ -298,6 +302,11 @@ public class GameLoop implements Screen {
     }
 
     private void exit() {
+        // Dispose SongSelect resources if you don’t need them
+        batch.dispose();
+        song.stop();
 
+        // Switch to GameLoop screen
+        game.setScreen(new SongSelect(game));
     }
 }

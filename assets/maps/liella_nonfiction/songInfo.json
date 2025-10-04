@@ -3,6 +3,7 @@
   "artist": "Liella!",
   "bpm": 116,
   "audio": "maps/liella_nonfiction/song.mp3",
-  "background": "maps/liella_nonfiction/nonfiction.png",
+  "audioTrimmed": "maps/liella_nonfiction/song_trimmed.mp3",
+  "background": "maps/liella_nonfiction/background.jpg",
   "noteFile": "maps/liella_nonfiction/noteFile.txt"
 }

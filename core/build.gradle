@@ -21,9 +21,15 @@ dependencies {
   api "games.rednblack.miniaudio:miniaudio:$miniaudioVersion"
   api "space.earlygrey:shapedrawer:$shapeDrawerVersion"
 
+  // FreeType (always added)
+  implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+  implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+
+  // Graal only
   if(enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
   }
 }
+
 
 

@@ -32,6 +32,7 @@ public class SongManager {
                         data.artist,
                         data.bpm,
                         data.audio,
+                        data.audioTrimmed,
                         data.background,
                         data.noteFile
                     );
@@ -45,28 +46,6 @@ public class SongManager {
     }
     public static class MapIndex {
         public ArrayList<String> maps;
-    }
-
-    public void drawSongTile(int screenHeight, Batch batch) {
-        System.out.println(songs.size());
-        int x = 0;
-        int y = screenHeight/2;
-        int offset = 0;
-        int counter = 1;
-        batch.begin();
-
-            for(Song song : songs) {
-                SongTile songTile = new SongTile(x, y, song);
-                batch.draw(songTile.getSongTileImage(), x, y+offset, songTile.getSongTileImageWidth(), songTile.getSongTileIMageHeight());
-                if(counter%2 == 0) {
-                    offset = (offset+(Math.abs(offset*2)))+ songTile.getSongTileIMageHeight()+10;
-                }else{
-                    offset = (offset-(offset*2))-10;
-                }
-                counter++;
-            }
-
-        batch.end();
     }
 
     public void selectSong(int index) {

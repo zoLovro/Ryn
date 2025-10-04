@@ -1,0 +1,9 @@
+{
+  "title": "Chance Day, Chance Way!",
+  "artist": "Liella!",
+  "bpm": 140,
+  "audio": "maps/liella_chance_day_chance_way/song.mp3",
+  "audioTrimmed": "maps/liella_chance_day_chance_way/song_trimmed.mp3",
+  "background": "maps/liella_chance_day_chance_way/background.jpg",
+  "noteFile": "maps/liella_chance_day_chance_way/noteFile.txt"
+}

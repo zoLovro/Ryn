@@ -7,14 +7,16 @@ public class Song {
     protected String artist;
     protected int bpm;
     protected String audioFile;
+    protected String audioFileTrimmed;
     protected String backgroundFile;
     protected String noteFile;
 
-    public Song(String title, String artist, int bpm, String audioFile, String backgroundFile, String noteFile) {
+    public Song(String title, String artist, int bpm, String audioFile, String audioFileTrimmed, String backgroundFile, String noteFile) {
         this.title = title;
         this.artist = artist;
         this.bpm = bpm;
         this.audioFile = audioFile;
+        this.audioFileTrimmed = audioFileTrimmed;
         this.backgroundFile = backgroundFile;
         this.noteFile = noteFile;
     }
@@ -23,6 +25,7 @@ public class Song {
     public String getArtist() { return artist; }
     public int getBpm() { return bpm; }
     public String getAudioFile() { return audioFile; }
+    public String getAudioFileTrimmed() { return audioFileTrimmed; }
     public String getBackgroundFile() { return backgroundFile; }
     public String getNoteFile() { return noteFile; }
 }

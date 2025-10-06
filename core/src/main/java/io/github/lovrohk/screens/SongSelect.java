@@ -102,7 +102,7 @@ public class SongSelect implements Screen {
         songManager.fillSongs();
 
         // font stuff
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/CAVOLINI.TTF"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("skins/testSkin/CAVOLINI.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 36; // font size in pixels
         font = generator.generateFont(parameter);

@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class SongTile extends Actor {
     protected BitmapFont font;
-    protected Texture songTileImage = new Texture(Gdx.files.internal("screenTextures/songTile.png"));;
+    protected Texture songTileImage = new Texture(Gdx.files.internal("skins/testSkin/songTile.png"));;
     protected int songTileImageWidth = 640;
     protected int songTileIMageHeight = 150;
     protected int paddingX = 10;

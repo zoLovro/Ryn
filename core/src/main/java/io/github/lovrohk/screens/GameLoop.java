@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -18,9 +19,9 @@ import io.github.lovrohk.Main;
 import io.github.lovrohk.game.*;
 import io.github.lovrohk.screensHelpful.RankAchievedManager;
 import io.github.lovrohk.screensHelpful.Song;
-
 import java.util.ArrayList;
 import java.util.List;
+
 
 /** First screen of the application. Displayed after the application is created. */
 public class GameLoop implements Screen {
@@ -45,8 +46,9 @@ public class GameLoop implements Screen {
     float mouseY;
 
     ScoreManager scoreManager;
-    BitmapFont font;
-    String displayText = "Score: 0";
+    BitmapFont gameFont;
+    BitmapFont endScreenFont;
+    String midGameInfo = "Score: 0";
     float acc;
     String formatted;
 
@@ -80,6 +82,15 @@ public class GameLoop implements Screen {
 
     Texture bgTexture;
 
+    protected float dimmedBgFailed;
+    protected float dimmedBg;
+    String finishedScore;
+    String finishedAcc;
+    String finishedCombo;
+    String finished200;
+    String finished50;
+    String finishedMiss;
+
     public GameLoop(Song selectedSong, Main game) {
         this.song = Gdx.audio.newMusic(Gdx.files.internal(selectedSong.getAudioFile()));
         this.file = Gdx.files.internal(selectedSong.getNoteFile());
@@ -99,8 +110,13 @@ public class GameLoop implements Screen {
 
         // score n stuff
         scoreManager = new ScoreManager();
-        font = new BitmapFont();
-        font.getData().setScale(2);
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("skins/testSkin/CAVOLINI.TTF"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 36; // font size in pixels
+        gameFont = generator.generateFont(parameter);
+        parameter.size = 70; // font size in pixels
+        endScreenFont = generator.generateFont(parameter);
+        generator.dispose();
 
         // viewport and camera for window resize
         camera = new OrthographicCamera();
@@ -125,8 +141,8 @@ public class GameLoop implements Screen {
         noteManager.setNotes(notes);
 
         // other textures
-        emptyNoteDown = new Texture(Gdx.files.internal("hitline/emptyHit.png"));
-        fullNoteDown = new Texture(Gdx.files.internal("hitline/fullHit.png"));
+        emptyNoteDown = new Texture(Gdx.files.internal("skins/testSkin/emptyHit.png"));
+        fullNoteDown = new Texture(Gdx.files.internal("skins/testSkin/fullHit.png"));
 
         // screen management
         isPaused = false;
@@ -134,7 +150,7 @@ public class GameLoop implements Screen {
         finished = false;
 
         // pause screen
-        pauseScreenTexture = new Texture(Gdx.files.internal("screenTextures/pauseScreen.png"));
+        pauseScreenTexture = new Texture(Gdx.files.internal("skins/testSkin/pauseScreen.png"));
         buttonManager = new ButtonManager();
         continueButtonRectPause = new Rectangle(17, 220, buttonManager.getContinueTextureWidth(), buttonManager.getContinueTextureHeight());
         restartButtonRectPause = new Rectangle(17, 120, buttonManager.getRestartTextureWidth(), buttonManager.getRestartTextureHeight());
@@ -142,15 +158,18 @@ public class GameLoop implements Screen {
 
         // background
         bgTexture = new Texture(Gdx.files.internal(selectedSong.getBackgroundFile()));
+        dimmedBg = 0.6f;
 
         // finished screen
         rankAchievedManager = new RankAchievedManager(scoreManager);
-        finishedScreenTexture = new Texture(Gdx.files.internal("screenTextures/finishedScreen.png"));
-        restartButtonRectFinished = new Rectangle(screenWidth-buttonManager.getRestartTextureWidth()-17, 120,
+        finishedScreenTexture = new Texture(Gdx.files.internal("skins/testSkin/finishedScreen.png"));
+        restartButtonRectFinished = new Rectangle(screenWidth-buttonManager.getRestartTextureWidth()-17, 350,
             buttonManager.getRestartTextureWidth(), buttonManager.getRestartTextureHeight());
-        exitButtonRectFinished = new Rectangle(screenWidth-buttonManager.getExitTextureWidth()-17, 20,
+        exitButtonRectFinished = new Rectangle(screenWidth-buttonManager.getExitTextureWidth()-17, 250,
             buttonManager.getExitTextureWidth(), buttonManager.getExitTextureHeight());
 
+        // failed screen
+        dimmedBgFailed = dimmedBg;
     }
 
     @Override
@@ -165,14 +184,14 @@ public class GameLoop implements Screen {
             // drawing everything
             batch.begin();
                 // background
-                batch.setColor(0.6f, 0.6f, 0.6f, 1f);
+                batch.setColor(dimmedBg, dimmedBg, dimmedBg, 1f);
                 batch.draw(bgTexture, 0, 0, screenWidth, screenHeight);
                 batch.setColor(Color.WHITE);
 
                 // notes
                 noteManager.draw(batch);
                 // text
-                font.draw(batch, displayText, 0, screenHeight - 30);
+                gameFont.draw(batch, midGameInfo, 0, screenHeight - 30);
 
                 // hitline stuff
                 emptyNoteTexture1 = Gdx.input.isKeyPressed(Input.Keys.D)
@@ -215,7 +234,7 @@ public class GameLoop implements Screen {
             shapeRenderer.rect(5, screenHeight - 20, noteManager.getHealthbarManager().getHealth() * 5, 15);
             shapeRenderer.end();
 
-            displayText = "Score: " + scoreManager.getScore() + " Accuracy: " + formatted + "%" + " Combo: " + scoreManager.getCombo();
+            midGameInfo = "Score: " + scoreManager.getScore() + " Accuracy: " + formatted + "%" + " Combo: " + scoreManager.getCombo();
 
             if(noteManager.getHealthbarManager().getHealth() <= 0) failed = true;
             if(noteManager.getNotes().isEmpty()) finished = true;
@@ -229,6 +248,7 @@ public class GameLoop implements Screen {
 
             if(restartButtonRectPause.contains(mouseX, mouseY) && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {restart(); resume(); failed = false;}
             if(exitButtonRectPause.contains(mouseX, mouseY) && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {exit();}
+            if(dimmedBgFailed >= 0) dimmedBgFailed -= 0.005f;
         }
         else if(finished) {
             pause();
@@ -236,6 +256,7 @@ public class GameLoop implements Screen {
             mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
             renderFinishedScreen();
             if(Gdx.input.isKeyJustPressed(Input.Keys.R)) {restart(); resume(); finished = false;}
+            if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {exit();}
 
             if(restartButtonRectFinished.contains(mouseX, mouseY) && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {restart(); resume(); finished = false;}
             if(exitButtonRectFinished.contains(mouseX, mouseY) && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {exit();}
@@ -312,10 +333,17 @@ public class GameLoop implements Screen {
         continueButtonRectPause = new Rectangle(17, 220, buttonManager.getContinueTextureWidth(), buttonManager.getContinueTextureHeight());
         restartButtonRectPause = new Rectangle(17, 120, buttonManager.getRestartTextureWidth(), buttonManager.getRestartTextureHeight());
         exitButtonRectPause = new Rectangle(17, 20, buttonManager.getExitTextureWidth(), buttonManager.getExitTextureHeight());
+
+        // failed screen
+        dimmedBgFailed = dimmedBg;
     }
 
     private void renderPauseScreen() {
         batch.begin();
+
+        batch.setColor(dimmedBg, dimmedBg, dimmedBg, 1f);
+            batch.draw(bgTexture, 0, 0, screenWidth, screenHeight);
+            batch.setColor(Color.WHITE);
 
             batch.draw(pauseScreenTexture, 0, 0, 1920, 1080);
             buttonManager.drawContinueButton(17, 220, batch);
@@ -328,9 +356,13 @@ public class GameLoop implements Screen {
     private void renderFailScreen() {
         batch.begin();
 
+        batch.setColor(dimmedBgFailed, dimmedBgFailed, dimmedBgFailed, 1f);
+            batch.draw(bgTexture, 0, 0, screenWidth, screenHeight);
+            batch.setColor(Color.WHITE);
+
             batch.draw(pauseScreenTexture, 0, 0, 1920, 1080);
-            buttonManager.drawRestartButton((int) restartButtonRectFinished.getX(), 120, batch);
-            buttonManager.drawExitButton((int) exitButtonRectFinished.getX(), 20, batch);
+            buttonManager.drawRestartButton(17, 120, batch);
+            buttonManager.drawExitButton(17, 20, batch);
 
         batch.end();
     }
@@ -338,11 +370,29 @@ public class GameLoop implements Screen {
     private void renderFinishedScreen() {
         batch.begin();
 
-            batch.draw(finishedScreenTexture, 0, 0, 1920, 1080);
-            buttonManager.drawRestartButton(17, 120, batch);
-            buttonManager.drawExitButton(17, 20, batch);
+            batch.setColor(dimmedBg, dimmedBg, dimmedBg, 1f);
+            batch.draw(bgTexture, 0, 0, screenWidth, screenHeight);
+            batch.setColor(Color.WHITE);
 
-            batch.draw(rankAchievedManager.calculateAchievedRank(), 300, 300, 400, 400); // CHANGE THIS PLS
+            batch.draw(finishedScreenTexture, 0, 0, 1920, 1080);
+            buttonManager.drawRestartButton(screenWidth-buttonManager.getRestartTextureWidth()-17, 350, batch);
+            buttonManager.drawExitButton(screenWidth-buttonManager.getExitTextureWidth()-17, 250, batch);
+
+            batch.draw(rankAchievedManager.calculateAchievedRank(), 1450, 500, rankAchievedManager.getRankWidth(), rankAchievedManager.getRankHeight());
+
+            finishedScore = Integer.toString(scoreManager.getScore());
+            finishedAcc = String.format("%.2f%%", scoreManager.getAccuracy());
+            finishedCombo = Integer.toString(scoreManager.getHighestCombo());
+            finished200 =  "200:     " + noteManager.getAccuracy()[2];
+            finished50 =   "50:      " + noteManager.getAccuracy()[1];
+            finishedMiss = "Miss:    " + noteManager.getAccuracy()[0];
+
+            endScreenFont.draw(batch, finishedScore, 450, 1000);
+            endScreenFont.draw(batch, finishedAcc, 650, 270);
+            endScreenFont.draw(batch, finishedCombo, 100, 270);
+            endScreenFont.draw(batch, finished200, 100, 900);
+            endScreenFont.draw(batch, finished50, 100, 800);
+            endScreenFont.draw(batch, finishedMiss, 100, 700);
 
         batch.end();
     }

@@ -2,13 +2,8 @@ package io.github.lovrohk.screensHelpful;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Json;
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class SongManager {
     protected ArrayList<Song> songs = new ArrayList<>();

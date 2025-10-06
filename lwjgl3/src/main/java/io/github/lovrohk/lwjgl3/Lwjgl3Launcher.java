@@ -18,7 +18,7 @@ public class Lwjgl3Launcher {
 
     private static Lwjgl3ApplicationConfiguration getDefaultConfiguration() {
         Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
-        configuration.setTitle("Idol Beats");
+        configuration.setTitle("Ryn");
         Graphics.DisplayMode displayMode = Lwjgl3ApplicationConfiguration.getDisplayMode();
         configuration.setFullscreenMode(displayMode);
         //// Vsync limits the frames per second to what your hardware can display, and helps eliminate

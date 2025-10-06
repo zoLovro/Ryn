@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class NoteManager {
     private List<Note> notes;
@@ -20,8 +19,8 @@ public class NoteManager {
     HealthbarManager healthbarManager = new HealthbarManager(5);
 
     // sound stuff
-    Sound hitSound = Gdx.audio.newSound(Gdx.files.internal("audio/sounds/hitSound.wav"));
-    Sound missSound = Gdx.audio.newSound(Gdx.files.internal("audio/sounds/missSound.mp3"));
+    Sound hitSound = Gdx.audio.newSound(Gdx.files.internal("skins/testSkin/hitSound.wav"));
+    Sound missSound = Gdx.audio.newSound(Gdx.files.internal("skins/testSkin/missSound.mp3"));
 
     public NoteManager(List<Note> notes, ScoreManager scoreManager) {
         this.notes = notes;

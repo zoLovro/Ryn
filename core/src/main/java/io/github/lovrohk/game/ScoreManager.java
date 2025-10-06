@@ -1,13 +1,17 @@
 package io.github.lovrohk.game;
 
 public class ScoreManager {
-    private int score;
-    private float accuracy;
-    private int combo;
+    protected int score;
+    protected float accuracy;
+    protected int combo;
+    protected int highestCombo;
+
 
     public ScoreManager() {
         this.score = 0;
         this.accuracy = 100.00f;
+        this.highestCombo = 0;
+        this.combo = 0;
     }
 
     public void update(int[] hits) {
@@ -21,6 +25,8 @@ public class ScoreManager {
         // scoring
         score = hit200 * 300 + hit50 * 100 - miss * 50;
         score += combo * 10; // example: combo bonus
+
+        if(highestCombo < combo) highestCombo = combo;
     }
 
     private float calculateAcc(int[] hits) {
@@ -43,6 +49,9 @@ public class ScoreManager {
 
     // getters
     public int getCombo() { return combo; }
+    public int getHighestCombo() {
+        return highestCombo;
+    }
     public int getScore() { return score; }
     public float getAccuracy() { return accuracy; }
 }

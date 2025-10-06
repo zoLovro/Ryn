@@ -35,7 +35,7 @@ public class ButtonManager {
     private class ContinueButton {
         protected int posX;
         protected int posY;
-        protected Texture continueButtonTexture = new Texture(Gdx.files.internal("buttons/continueButtonTexture.png"));
+        protected Texture continueButtonTexture = new Texture(Gdx.files.internal("skins/testSkin/continueButtonTexture.png"));
 
         public ContinueButton(int posX, int posY) {
             this.posX = posX;
@@ -63,7 +63,7 @@ public class ButtonManager {
     private class RestartButton {
         protected int posX;
         protected int posY;
-        protected Texture restartButtonTexture = new Texture(Gdx.files.internal("buttons/restartButtonTexture.png"));
+        protected Texture restartButtonTexture = new Texture(Gdx.files.internal("skins/testSkin/restartButtonTexture.png"));
 
         public RestartButton(int posX, int posY) {
             this.posX = posX;
@@ -91,7 +91,7 @@ public class ButtonManager {
     private class ExitButton {
         protected int posX;
         protected int posY;
-        protected Texture exitButtonTexture = new Texture(Gdx.files.internal("buttons/exitButtonTexture.png"));
+        protected Texture exitButtonTexture = new Texture(Gdx.files.internal("skins/testSkin/exitButtonTexture.png"));
 
         public ExitButton(int posX, int posY) {
             this.posX = posX;

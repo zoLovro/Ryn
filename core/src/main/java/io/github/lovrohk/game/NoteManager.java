@@ -14,7 +14,6 @@ public class NoteManager {
     private List<Note> notes;
     List<Note> toRemove = new ArrayList<>();
     int[] accuracy  = new int[]{0, 0, 0};
-    int combo = 0;
     private ScoreManager scoreManager;
 
     // health (in the future every map will hold the HPstat in the map file)
@@ -117,6 +116,7 @@ public class NoteManager {
     public void setNotes(List<Note> a) {
         notes = a;
     }
+    public List<Note> getNotes() { return notes; }
 
     public int[] getAccuracy() {
         return accuracy.clone(); // prevents unwanted modification

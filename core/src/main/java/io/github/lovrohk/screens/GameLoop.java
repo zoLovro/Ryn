@@ -71,7 +71,7 @@ public class GameLoop implements Screen {
     protected boolean finished;
     Texture pauseScreenTexture;
     Texture finishedScreenTexture;
-    ButtonManager buttonManager;
+    GameButtonManager gameButtonManager;
     Rectangle continueButtonRectPause;
     Rectangle restartButtonRectPause;
     Rectangle exitButtonRectPause;
@@ -151,10 +151,10 @@ public class GameLoop implements Screen {
 
         // pause screen
         pauseScreenTexture = new Texture(Gdx.files.internal("skins/testSkin/pauseScreen.png"));
-        buttonManager = new ButtonManager();
-        continueButtonRectPause = new Rectangle(17, 220, buttonManager.getContinueTextureWidth(), buttonManager.getContinueTextureHeight());
-        restartButtonRectPause = new Rectangle(17, 120, buttonManager.getRestartTextureWidth(), buttonManager.getRestartTextureHeight());
-        exitButtonRectPause = new Rectangle(17, 20, buttonManager.getExitTextureWidth(), buttonManager.getExitTextureHeight());
+        gameButtonManager = new GameButtonManager();
+        continueButtonRectPause = new Rectangle(17, 220, gameButtonManager.getContinueTextureWidth(), gameButtonManager.getContinueTextureHeight());
+        restartButtonRectPause = new Rectangle(17, 120, gameButtonManager.getRestartTextureWidth(), gameButtonManager.getRestartTextureHeight());
+        exitButtonRectPause = new Rectangle(17, 20, gameButtonManager.getExitTextureWidth(), gameButtonManager.getExitTextureHeight());
 
         // background
         bgTexture = new Texture(Gdx.files.internal(selectedSong.getBackgroundFile()));
@@ -163,10 +163,10 @@ public class GameLoop implements Screen {
         // finished screen
         rankAchievedManager = new RankAchievedManager(scoreManager);
         finishedScreenTexture = new Texture(Gdx.files.internal("skins/testSkin/finishedScreen.png"));
-        restartButtonRectFinished = new Rectangle(screenWidth-buttonManager.getRestartTextureWidth()-17, 350,
-            buttonManager.getRestartTextureWidth(), buttonManager.getRestartTextureHeight());
-        exitButtonRectFinished = new Rectangle(screenWidth-buttonManager.getExitTextureWidth()-17, 250,
-            buttonManager.getExitTextureWidth(), buttonManager.getExitTextureHeight());
+        restartButtonRectFinished = new Rectangle(screenWidth- gameButtonManager.getRestartTextureWidth()-17, 350,
+            gameButtonManager.getRestartTextureWidth(), gameButtonManager.getRestartTextureHeight());
+        exitButtonRectFinished = new Rectangle(screenWidth- gameButtonManager.getExitTextureWidth()-17, 250,
+            gameButtonManager.getExitTextureWidth(), gameButtonManager.getExitTextureHeight());
 
         // failed screen
         dimmedBgFailed = dimmedBg;
@@ -329,10 +329,10 @@ public class GameLoop implements Screen {
         noteManager.setNotes(notes);
 
         // pause screen
-        buttonManager = new ButtonManager();
-        continueButtonRectPause = new Rectangle(17, 220, buttonManager.getContinueTextureWidth(), buttonManager.getContinueTextureHeight());
-        restartButtonRectPause = new Rectangle(17, 120, buttonManager.getRestartTextureWidth(), buttonManager.getRestartTextureHeight());
-        exitButtonRectPause = new Rectangle(17, 20, buttonManager.getExitTextureWidth(), buttonManager.getExitTextureHeight());
+        gameButtonManager = new GameButtonManager();
+        continueButtonRectPause = new Rectangle(17, 220, gameButtonManager.getContinueTextureWidth(), gameButtonManager.getContinueTextureHeight());
+        restartButtonRectPause = new Rectangle(17, 120, gameButtonManager.getRestartTextureWidth(), gameButtonManager.getRestartTextureHeight());
+        exitButtonRectPause = new Rectangle(17, 20, gameButtonManager.getExitTextureWidth(), gameButtonManager.getExitTextureHeight());
 
         // failed screen
         dimmedBgFailed = dimmedBg;
@@ -346,9 +346,9 @@ public class GameLoop implements Screen {
             batch.setColor(Color.WHITE);
 
             batch.draw(pauseScreenTexture, 0, 0, 1920, 1080);
-            buttonManager.drawContinueButton(17, 220, batch);
-            buttonManager.drawRestartButton(17, 120, batch);
-            buttonManager.drawExitButton(17, 20, batch);
+            gameButtonManager.drawContinueButton(17, 220, batch);
+            gameButtonManager.drawRestartButton(17, 120, batch);
+            gameButtonManager.drawExitButton(17, 20, batch);
 
         batch.end();
     }
@@ -361,8 +361,8 @@ public class GameLoop implements Screen {
             batch.setColor(Color.WHITE);
 
             batch.draw(pauseScreenTexture, 0, 0, 1920, 1080);
-            buttonManager.drawRestartButton(17, 120, batch);
-            buttonManager.drawExitButton(17, 20, batch);
+            gameButtonManager.drawRestartButton(17, 120, batch);
+            gameButtonManager.drawExitButton(17, 20, batch);
 
         batch.end();
     }
@@ -375,8 +375,8 @@ public class GameLoop implements Screen {
             batch.setColor(Color.WHITE);
 
             batch.draw(finishedScreenTexture, 0, 0, 1920, 1080);
-            buttonManager.drawRestartButton(screenWidth-buttonManager.getRestartTextureWidth()-17, 350, batch);
-            buttonManager.drawExitButton(screenWidth-buttonManager.getExitTextureWidth()-17, 250, batch);
+            gameButtonManager.drawRestartButton(screenWidth- gameButtonManager.getRestartTextureWidth()-17, 350, batch);
+            gameButtonManager.drawExitButton(screenWidth- gameButtonManager.getExitTextureWidth()-17, 250, batch);
 
             batch.draw(rankAchievedManager.calculateAchievedRank(), 1450, 500, rankAchievedManager.getRankWidth(), rankAchievedManager.getRankHeight());
 

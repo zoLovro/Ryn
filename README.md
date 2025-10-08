@@ -6,7 +6,24 @@ Ryn is a cross-platform rhythm game, inspired by [osu! mania](https://github.com
 
 ---
 # Table of contents
-- [Installation](#Installation)
+- [Installation](#installation)
+  - [Windows, MacOS and Linux](#windows-macos-and-linux)
+- [Building](#building)
+- [License](#license)
 
 ---
 # Installation
+## Windows, MacOS and Linux
+Head to the [GitHub releases page](https://github.com/zoLovro/Ryn/releases) and download the file relevant to your operating system. There you will also find the zipped source code.
+
+If you are on Windows, just download and run the installer provided and you should be good to go.
+
+For MacOS users, first follow the instructions down below. *Only then* can you mount the DMG and install it into a folder of your choice. After that, you should be good to go.
+
+For Linux users, ***Under construction.***
+
+# Building
+All details and instruction will be written in the [Bulding.md](Docs/Building.md) file.
+
+# License
+Ryn uses an MIT license.

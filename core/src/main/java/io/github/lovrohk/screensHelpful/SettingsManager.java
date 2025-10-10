@@ -32,7 +32,7 @@ public class SettingsManager {
     public int getAudioOffset() {return audioOffset;}
 
     public void setNoteSpeed(float a) {noteSpeed = a;}
-    public int getNoteSpeed() {return noteSpeed;}
+    public float getNoteSpeed() {return noteSpeed;}
 
     public void setVolume(int a) {volume = a;}
     public int getVolume() {return volume;}

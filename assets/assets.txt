@@ -11,6 +11,7 @@ gameImages/githubButton.png
 gameImages/githubButtonSelect.png
 gameImages/mainMenuBG.jpg
 gameImages/mainMenuBG.png
+gameImages/settingsBG.jpg
 gameImages/settingsButton.png
 gameImages/settingsButtonSelect.png
 maps/index.json

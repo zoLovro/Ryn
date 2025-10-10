@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 /** First screen of the application. Displayed after the application is created. */
 public class Settings implements Screen {
@@ -13,13 +16,13 @@ public class Settings implements Screen {
     protected SpriteBatch batch;
     protected ShapeRenderer shapeRenderer;
 
-    
+
     protected int screenWidth;
     protected int screenHeight;
     protected OrthographicCamera camera;
     protected Viewport viewport;
 
-    protected Texture background; 
+    protected Texture background;
 
     public Settings(Main game) {this.game = game;}
 
@@ -37,7 +40,7 @@ public class Settings implements Screen {
 
         // bg
         background = new Texture(Gdx.files.internal("gameImages/settingsBG.jpg"));
-        
+
         // useful
         screenWidth = (int) viewport.getWorldWidth();
         screenHeight = (int) viewport.getWorldHeight();

@@ -12,6 +12,7 @@ buildscript {
 
 plugins {
   id "application"
+  id 'io.github.fourlastor.construo' version '2.0.1'
 }
 apply plugin: 'io.github.fourlastor.construo'
 
@@ -77,6 +78,43 @@ tasks.named("run").configure {
     }
   }
 }
+
+construo {
+  // name of the executable
+  name.set("Ryn")
+  // human-readable name, used for example in the `.app` name for macOS
+  humanName.set("Ryn")
+  // Optional, defaults to application.mainClass or jar task main class
+  mainClass.set("io.github.lovrohk.Main")
+  // Optional, defaults to $buildDir/construo/dist
+  // where to put the packaged zips
+  outputDir.set(rootProject.file("dist"))
+  // Optional, an alternative jar task name to base the build upon
+  jarTask.set("myJarTaskName")
+  // Optional, a folder to use as the root in the zip output file
+  zipFolder.set("game-v1.0.0")
+}
+
+tasks.register('fatJar', Jar) {
+  archiveBaseName.set('MyGame')
+  manifest {
+    attributes 'Main-Class': 'io.github.lovrohk.lwjgl3.Lwjgl3Launcher'
+  }
+
+  // Include lwjgl3 compiled classes
+  from sourceSets.main.output
+
+  // Include core module classes
+  from(project(':core').sourceSets.main.output)
+
+  // Include runtime dependencies
+  from {
+    configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+  }
+
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 
 
 

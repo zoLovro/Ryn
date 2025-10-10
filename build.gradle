@@ -1,4 +1,4 @@
-apply plugin: 'java'
+
 buildscript {
   repositories {
     mavenCentral()
@@ -14,6 +14,28 @@ buildscript {
 
   }
 }
+plugins {
+  id 'java'
+  id 'io.github.fourlastor.construo' version '2.0.1'
+}
+
+
+construo {
+  // name of the executable
+  name.set("Ryn")
+  // human-readable name, used for example in the `.app` name for macOS
+  humanName.set("Ryn")
+  // Optional, defaults to application.mainClass or jar task main class
+  mainClass.set("io.github.lovrohk.Main")
+  // Optional, defaults to $buildDir/construo/dist
+  // where to put the packaged zips
+  outputDir.set(rootProject.file("dist"))
+  // Optional, an alternative jar task name to base the build upon
+  jarTask.set("myJarTaskName")
+  // Optional, a folder to use as the root in the zip output file
+  zipFolder.set("game-v1.0.0")
+}
+
 
 allprojects {
   apply plugin: 'eclipse'
@@ -76,8 +98,10 @@ eclipse.project.name = 'LoveLiveRythmGame' + '-parent'
 tasks.register('fatJar', Jar) {
   archiveBaseName = 'MyGame'
   manifest {
-    attributes 'Main-Class': 'io.github.lovrohk.Main'
+    attributes 'Main-Class': 'Main'
   }
   from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
   from sourceSets.main.output
 }
+
+

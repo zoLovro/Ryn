@@ -59,19 +59,19 @@ public class SongSelect implements Screen {
     Image bgImage;
     Song selectedSong = null; // store currently selected song
     protected float curVol = 0;
-    private Music currentSongPreview;
-    private float targetVolume = 0.2f; // or whatever you want
-    private float fadeDuration = 2f; // seconds
-    private float fadeElapsed = 0f;
-    private boolean fadingIn = false;
+    protected Music currentSongPreview;
+    protected float targetVolume = 0.2f; // or whatever you want
+    protected float fadeDuration = 2f; // seconds
+    protected float fadeElapsed = 0f;
+    protected boolean fadingIn = false;
 
-    private Table infoPanel;
-    private Label titleLabel;
-    private Label artistLabel;
-    private Label bpmLabel;
-    private Label.LabelStyle labelStyle;
-    private float infoPanelX, infoPanelY, infoPanelWidth, infoPanelHeight;
-    private SongTile selectedTile;
+    protected Table infoPanel;
+    protected Label titleLabel;
+    protected Label artistLabel;
+    protected Label bpmLabel;
+    protected Label.LabelStyle labelStyle;
+    protected float infoPanelX, infoPanelY, infoPanelWidth, infoPanelHeight;
+    protected SongTile selectedTile;
 
 
     public SongSelect(Main game) {this.game = game;}
@@ -238,7 +238,10 @@ public class SongSelect implements Screen {
 
         stage.draw();
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) Gdx.app.exit();
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            this.dispose();
+            if(currentSongPreview != null) currentSongPreview.stop();
+            game.setScreen(new MainMenu(game));}
     }
 
 
@@ -268,13 +271,14 @@ public class SongSelect implements Screen {
     @Override
     public void dispose() {
         // Destroy screen's assets here.
+        batch.dispose();
     }
 
     private void changeToGame(int song) {
         // Dispose SongSelect resources if you don’t need them
         batch.dispose();
         stage.dispose();
-        currentSongPreview.stop();
+        if(currentSongPreview.isPlaying()) currentSongPreview.stop();
 
         // Get the selected song (here we pick the first one as an example)
         songManager.selectSong(song); // replace 0 with your selected index

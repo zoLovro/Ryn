@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NoteManager {
-    private List<Note> notes;
-    List<Note> toRemove = new ArrayList<>();
-    int[] accuracy  = new int[]{0, 0, 0};
-    private ScoreManager scoreManager;
+    protected List<Note> notes;
+    protected List<Note> toRemove = new ArrayList<>();
+    protected int[] accuracy  = new int[]{0, 0, 0};
+    protected ScoreManager scoreManager;
 
     // health (in the future every map will hold the HPstat in the map file)
     HealthbarManager healthbarManager = new HealthbarManager(5);
@@ -32,8 +32,15 @@ public class NoteManager {
         for (Note note : notes) {
             note.update(delta, songTime);
 
-            if(note.isHit()) {
+            if (note.isHit() || songTime - note.getTime() > 0.25) {
                 toRemove.add(note);
+                if (!note.isHit() && songTime - note.getTime() > 0.25) {
+                    accuracy[0] += 1;
+                    scoreManager.resetCombo();
+                    scoreManager.update(accuracy);
+                    healthbarManager.missHealth();
+                    missSound.play(0.1f);
+                }
             }
         }
 

@@ -3,6 +3,7 @@ package io.github.lovrohk.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -86,6 +87,10 @@ public class MainMenu implements Screen {
     @Override
     public void render(float delta) {
         // Draw your screen here. "delta" is the time since last render in seconds.
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
@@ -103,6 +108,7 @@ public class MainMenu implements Screen {
             if (gameStartButtonRect.contains(mouseX, mouseY)) {
                 mainMenuButtonManager.drawSelectGameStartButton(batch, buttonsX, gameStartButtonY);
                 if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+                    this.dispose();
                     game.setScreen(new SongSelect(game));
                 }
             } else {
@@ -121,6 +127,7 @@ public class MainMenu implements Screen {
             if (settingsButtonRect.contains(mouseX, mouseY)) {
                 mainMenuButtonManager.drawSelectSettingsButton(batch, buttonsX, settingsButtonY);
                 if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+                    this.dispose();
                     game.setScreen(new Settings(game));
                 }
             } else {

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import io.github.lovrohk.screensHelpful.SettingsManager;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -14,6 +15,8 @@ public class NoteManager {
     protected List<Note> toRemove = new ArrayList<>();
     protected int[] accuracy  = new int[]{0, 0, 0};
     protected ScoreManager scoreManager;
+
+    protected float sfxVolume = SettingsManager.settings.sfxVolume;
 
     // health (in the future every map will hold the HPstat in the map file)
     HealthbarManager healthbarManager = new HealthbarManager(5);
@@ -39,7 +42,7 @@ public class NoteManager {
                     scoreManager.resetCombo();
                     scoreManager.update(accuracy);
                     healthbarManager.missHealth();
-                    missSound.play(0.1f);
+                    missSound.play(sfxVolume);
                 }
             }
         }
@@ -78,21 +81,21 @@ public class NoteManager {
                 scoreManager.addCombo();
                 scoreManager.update(accuracy);
                 healthbarManager.hit200Health();
-                hitSound.play(0.1f);
+                hitSound.play(sfxVolume);
             } else if (minDiff <= hit50) {
                 closest.hit();
                 accuracy[1] += 1;
                 scoreManager.addCombo();
                 scoreManager.update(accuracy);
                 healthbarManager.hit50Health();
-                hitSound.play(0.1f);
+                hitSound.play(sfxVolume);
             } else if (minDiff <= missWindow) {
                 closest.hit();
                 accuracy[0] += 1;
                 scoreManager.resetCombo();
                 scoreManager.update(accuracy);
                 healthbarManager.missHealth();
-                missSound.play(0.1f);
+                missSound.play(sfxVolume);
             }
         }
     }

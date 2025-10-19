@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.lovrohk.Main;
 import io.github.lovrohk.game.*;
 import io.github.lovrohk.screensHelpful.RankAchievedManager;
+import io.github.lovrohk.screensHelpful.SettingsManager;
 import io.github.lovrohk.screensHelpful.Song;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +38,16 @@ public class GameLoop implements Screen {
     List<Note> tempNote = new ArrayList<>();
     FileHandle file;
 
+    float musicVolume = SettingsManager.settings.musicVolume;
+
     Texture emptyNoteDown;
+    Texture emptyNoteUp;
+    Texture emptyNoteRight;
+    Texture emptyNoteLeft;
     Texture fullNoteDown;
+    Texture fullNoteUp;
+    Texture fullNoteRight;
+    Texture fullNoteLeft;
     Texture emptyNoteTexture1;
     Texture emptyNoteTexture2;
     Texture emptyNoteTexture3;
@@ -104,7 +114,7 @@ public class GameLoop implements Screen {
         shapeRenderer = new ShapeRenderer();
 
         // Playing music :D
-        song.setVolume(0.2f);
+        song.setVolume(musicVolume);
         song.setLooping(false);
         song.play();
 
@@ -140,9 +150,16 @@ public class GameLoop implements Screen {
         notes = noteManager.fillNotes(file);
         noteManager.setNotes(notes);
 
-        // other textures
-        emptyNoteDown = new Texture(Gdx.files.internal("skins/testSkin/emptyHit.png"));
-        fullNoteDown = new Texture(Gdx.files.internal("skins/testSkin/fullHit.png"));
+        // hitline textures
+        emptyNoteDown = new Texture(Gdx.files.internal("skins/testSkin/emptyHitDown.png"));
+        emptyNoteUp = new Texture(Gdx.files.internal("skins/testSkin/emptyHitUp.png"));
+        emptyNoteLeft = new Texture(Gdx.files.internal("skins/testSkin/emptyHitLeft.png"));
+        emptyNoteRight = new Texture(Gdx.files.internal("skins/testSkin/emptyHitRight.png"));
+
+        fullNoteDown = new Texture(Gdx.files.internal("skins/testSkin/fullHitDown.png"));
+        fullNoteUp = new Texture(Gdx.files.internal("skins/testSkin/fullHitUp.png"));
+        fullNoteLeft = new Texture(Gdx.files.internal("skins/testSkin/fullHitLeft.png"));
+        fullNoteRight = new Texture(Gdx.files.internal("skins/testSkin/fullHitRight.png"));
 
         // screen management
         isPaused = false;
@@ -158,7 +175,7 @@ public class GameLoop implements Screen {
 
         // background
         bgTexture = new Texture(Gdx.files.internal(selectedSong.getBackgroundFile()));
-        dimmedBg = 0.6f;
+        dimmedBg = SettingsManager.settings.backgrounDim;
 
         // finished screen
         rankAchievedManager = new RankAchievedManager(scoreManager);
@@ -195,17 +212,17 @@ public class GameLoop implements Screen {
 
                 // hitline stuff
                 emptyNoteTexture1 = Gdx.input.isKeyPressed(Input.Keys.D)
-                    ? fullNoteDown
-                    : emptyNoteDown;
+                    ? fullNoteLeft
+                    : emptyNoteLeft;
                 emptyNoteTexture2 = Gdx.input.isKeyPressed(Input.Keys.F)
                     ? fullNoteDown
                     : emptyNoteDown;
                 emptyNoteTexture3 = Gdx.input.isKeyPressed(Input.Keys.J)
-                    ? fullNoteDown
-                    : emptyNoteDown;
+                    ? fullNoteUp
+                    : emptyNoteUp;
                 emptyNoteTexture4 = Gdx.input.isKeyPressed(Input.Keys.K)
-                    ? fullNoteDown
-                    : emptyNoteDown;
+                    ? fullNoteRight
+                    : emptyNoteRight;
                 batch.draw(emptyNoteTexture1, 802, hitLineHeight, 64, 64);
                 batch.draw(emptyNoteTexture2, 886, hitLineHeight, 64, 64);
                 batch.draw(emptyNoteTexture3, 970, hitLineHeight, 64, 64);
@@ -316,7 +333,7 @@ public class GameLoop implements Screen {
     private void restart() {
         song.stop();
         songTime = 0f;
-        song.setVolume(0.2f);
+        song.setVolume(musicVolume);
         song.setLooping(false);
         song.play();
 

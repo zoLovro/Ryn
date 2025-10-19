@@ -1,40 +1,41 @@
 package io.github.lovrohk.screensHelpful;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Rectangle;
-import io.github.lovrohk.Main;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.badlogic.gdx.utils.Json;
 
 public class SettingsManager {
-    protected Rectangle volumeBar;
+    private static final String FILE_NAME = "settings.json";
+    private static final Json json = new Json();
 
-    protected int volume;
-    protected int audioOffset;
-    protected float noteSpeed;
-    protected String[] keybinds;
+    // This is your actual settings object
+    public static SettingsData settings = new SettingsData();
 
-    public SettingsManager(int volume, int audioOffset, float noteSpeed, String[] keybinds) {
-        this.volume = volume;
-        this.audioOffset = audioOffset;
-        this.noteSpeed = noteSpeed;
-        this.keybinds = keybinds;
+    /** Load settings from file, or create defaults if none exist */
+    public static void load() {
+        if (Gdx.files.local(FILE_NAME).exists()) {
+            settings = json.fromJson(SettingsData.class, Gdx.files.local(FILE_NAME));
+        } else {
+            setDefaults();
+            save();
+        }
     }
 
+    /** Save current settings to file */
+    public static void save() {
+        json.toJson(settings, Gdx.files.local(FILE_NAME));
+    }
 
-
-    // getters/setters
-    public void setKeybinds(String[] a) {keybinds = a;}
-    public String[] getKeybinds() {return keybinds;}
-
-    public void setAudioOffset(int a) {audioOffset = a;}
-    public int getAudioOffset() {return audioOffset;}
-
-    public void setNoteSpeed(float a) {noteSpeed = a;}
-    public float getNoteSpeed() {return noteSpeed;}
-
-    public void setVolume(int a) {volume = a;}
-    public int getVolume() {return volume;}
+    /** Fill settings with reasonable defaults */
+    private static void setDefaults() {
+        settings.masterVolume = 1.0f;
+        settings.musicVolume = 1.0f;
+        settings.sfxVolume = 1.0f;
+        settings.language = "en";
+        settings.resolutionWidth = 1920;
+        settings.resolutionHeight = 1080;
+        settings.fullscreen = false;
+        settings.backgrounDim = 0.6f;
+        settings.noteSpeed = 1.0f;
+        // Add defaults for keybinds if you have any
+    }
 }

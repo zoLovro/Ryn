@@ -1,6 +1,7 @@
 package io.github.lovrohk.screensHelpful;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.Json;
 
 public class SettingsManager {
@@ -37,5 +38,6 @@ public class SettingsManager {
         settings.backgrounDim = 0.6f;
         settings.noteSpeed = 1.0f;
         // Add defaults for keybinds if you have any
+        settings.keybinds = new String[]{"D", "F", "J", "K"};
     }
 }

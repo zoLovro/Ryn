@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -206,6 +207,37 @@ public class SongSelect implements Screen {
         scrollPane.setFillParent(true); // make it fill the stage
         scrollPane.setScrollingDisabled(true, false); // allow vertical scrolling only
         stage.addActor(scrollPane);
+
+        // select random song
+        int randomIndex = (int)(Math.random() * songManager.getSongs().size());
+        selectedSong = songManager.getSongs().get(randomIndex);
+        for (Actor actor : table.getChildren()) {
+            if (actor instanceof SongTile) {
+                SongTile tile = (SongTile) actor;
+                if (tile.getSong() == selectedSong) {
+                    selectedTile = tile;
+                    tile.addAction(Actions.scaleTo(1.15f, 1.05f, 0.2f));
+                    // update info panel
+                    titleLabel.setText("Title: " + selectedSong.getTitle());
+                    artistLabel.setText("Artist: " + selectedSong.getArtist());
+                    bpmLabel.setText("BPM: " + selectedSong.getBpm());
+
+                    // load background and preview
+                    bgTexture = new Texture(Gdx.files.internal(selectedSong.getBackgroundFile()));
+                    if (currentSongPreview != null) {
+                        currentSongPreview.stop();
+                        currentSongPreview.dispose();
+                    }
+                    currentSongPreview = Gdx.audio.newMusic(Gdx.files.internal(selectedSong.getAudioFileTrimmed()));
+                    currentSongPreview.setLooping(true);
+                    currentSongPreview.setVolume(0f);
+                    currentSongPreview.play();
+                    fadeElapsed = 0f;
+                    fadingIn = true;
+                    break;
+                }
+            }
+        }
     }
 
     @Override

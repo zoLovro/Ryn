@@ -44,4 +44,8 @@ public class SongTile extends Actor {
     public float getHeight() { return songTileIMageHeight; }
 
     public Texture getSongTileImage() {return songTileImage;}
+
+    public Song getSong() {
+        return song;
+    }
 }

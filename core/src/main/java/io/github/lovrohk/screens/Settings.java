@@ -59,7 +59,6 @@ public class Settings implements Screen {
 
     @Override
     public void show() {
-        settingsManager = new SettingsManager();
 
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
@@ -104,9 +103,7 @@ public class Settings implements Screen {
                 return false;
             }
         });
-
     }
-
 
     @Override
     public void render(float delta) {
@@ -174,6 +171,8 @@ public class Settings implements Screen {
             case "Background dim":
             case "Note speed":
             case "Keybinds":
+                dispose();
+                game.setScreen(new KeybindsScreen(game));
                 break;
 
             default:
@@ -242,7 +241,6 @@ public class Settings implements Screen {
         i = (i + dir + langs.length) % langs.length;
         SettingsManager.settings.language = langs[i];
     }
-
     private void cycleResolution(int dir) {
         int[][] resolutions = {{1280, 720}, {1600, 900}, {1920, 1080}};
         int i = 0;
@@ -271,6 +269,7 @@ public class Settings implements Screen {
             case "Note speed":
                 return String.format("%.0f", SettingsManager.settings.noteSpeed * 100);
             case "Keybinds":
+                return String.join(", ", SettingsManager.settings.keybinds);
             default:
                 return "";
         }
@@ -302,6 +301,7 @@ public class Settings implements Screen {
 
     @Override
     public void dispose() {
+        batch.dispose();
         // Destroy screen's assets here.
     }
 }

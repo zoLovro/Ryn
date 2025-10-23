@@ -16,7 +16,7 @@ public class NoteManager {
     protected int[] accuracy  = new int[]{0, 0, 0};
     protected ScoreManager scoreManager;
 
-    protected float sfxVolume = SettingsManager.settings.sfxVolume;
+    protected float sfxVolume = SettingsManager.settings.sfxVolume * SettingsManager.settings.masterVolume;
 
     // health (in the future every map will hold the HPstat in the map file)
     HealthbarManager healthbarManager = new HealthbarManager(5);

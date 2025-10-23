@@ -38,7 +38,7 @@ public class GameLoop implements Screen {
     List<Note> tempNote = new ArrayList<>();
     FileHandle file;
 
-    float musicVolume = SettingsManager.settings.musicVolume;
+    protected float musicVolume = SettingsManager.settings.musicVolume * SettingsManager.settings.masterVolume;
 
     Texture emptyNoteDown;
     Texture emptyNoteUp;
@@ -100,6 +100,7 @@ public class GameLoop implements Screen {
     String finished200;
     String finished50;
     String finishedMiss;
+    protected int[] keyCodes;
 
     public GameLoop(Song selectedSong, Main game) {
         this.song = Gdx.audio.newMusic(Gdx.files.internal(selectedSong.getAudioFile()));
@@ -187,6 +188,13 @@ public class GameLoop implements Screen {
 
         // failed screen
         dimmedBgFailed = dimmedBg;
+
+        // keybinds
+        String[] savedKeys = SettingsManager.settings.keybinds;
+        keyCodes = new int[savedKeys.length];
+        for (int i = 0; i < savedKeys.length; i++) {
+            keyCodes[i] = Input.Keys.valueOf(savedKeys[i].toUpperCase());
+        }
     }
 
     @Override
@@ -211,16 +219,16 @@ public class GameLoop implements Screen {
                 gameFont.draw(batch, midGameInfo, 0, screenHeight - 30);
 
                 // hitline stuff
-                emptyNoteTexture1 = Gdx.input.isKeyPressed(Input.Keys.D)
+                emptyNoteTexture1 = Gdx.input.isKeyPressed(keyCodes[0])
                     ? fullNoteLeft
                     : emptyNoteLeft;
-                emptyNoteTexture2 = Gdx.input.isKeyPressed(Input.Keys.F)
+                emptyNoteTexture2 = Gdx.input.isKeyPressed(keyCodes[1])
                     ? fullNoteDown
                     : emptyNoteDown;
-                emptyNoteTexture3 = Gdx.input.isKeyPressed(Input.Keys.J)
+                emptyNoteTexture3 = Gdx.input.isKeyPressed(keyCodes[2])
                     ? fullNoteUp
                     : emptyNoteUp;
-                emptyNoteTexture4 = Gdx.input.isKeyPressed(Input.Keys.K)
+                emptyNoteTexture4 = Gdx.input.isKeyPressed(keyCodes[3])
                     ? fullNoteRight
                     : emptyNoteRight;
                 batch.draw(emptyNoteTexture1, 802, hitLineHeight, 64, 64);
@@ -232,10 +240,10 @@ public class GameLoop implements Screen {
             batch.end();
 
             // hit detection
-            if(Gdx.input.isKeyJustPressed(Input.Keys.D)) noteManager.checkHit(songTime, 1);
-            if(Gdx.input.isKeyJustPressed(Input.Keys.F)) noteManager.checkHit(songTime, 2);
-            if(Gdx.input.isKeyJustPressed(Input.Keys.J)) noteManager.checkHit(songTime, 3);
-            if(Gdx.input.isKeyJustPressed(Input.Keys.K)) noteManager.checkHit(songTime, 4);
+            if(Gdx.input.isKeyJustPressed(keyCodes[0])) noteManager.checkHit(songTime, 1);
+            if(Gdx.input.isKeyJustPressed(keyCodes[1])) noteManager.checkHit(songTime, 2);
+            if(Gdx.input.isKeyJustPressed(keyCodes[2])) noteManager.checkHit(songTime, 3);
+            if(Gdx.input.isKeyJustPressed(keyCodes[3])) noteManager.checkHit(songTime, 4);
 
             if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) pause();
 

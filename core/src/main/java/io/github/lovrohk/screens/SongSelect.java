@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.lovrohk.Main;
+import io.github.lovrohk.screensHelpful.SettingsManager;
 import io.github.lovrohk.screensHelpful.Song;
 import io.github.lovrohk.screensHelpful.SongManager;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -61,7 +62,7 @@ public class SongSelect implements Screen {
     Song selectedSong = null; // store currently selected song
     protected float curVol = 0;
     protected Music currentSongPreview;
-    protected float targetVolume = 0.2f; // or whatever you want
+    protected float targetVolume = SettingsManager.settings.musicVolume * SettingsManager.settings.masterVolume;
     protected float fadeDuration = 2f; // seconds
     protected float fadeElapsed = 0f;
     protected boolean fadingIn = false;
@@ -79,16 +80,15 @@ public class SongSelect implements Screen {
 
     @Override
     public void show() {
+        batch = new SpriteBatch();
+        camera = new OrthographicCamera();
+        viewport = new FitViewport(1920, 1080, camera);
+        viewport.apply();
 
-        stage = new Stage(new ScreenViewport());
+        stage = new Stage(viewport, batch);
         Gdx.input.setInputProcessor(stage); // so stage receives input
 
-        batch = new SpriteBatch();
-
         // camera stuff
-        camera = new OrthographicCamera();
-        viewport = new FitViewport(1920, 1080, camera); //
-        viewport.apply();
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
 
         // useful
@@ -106,6 +106,8 @@ public class SongSelect implements Screen {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("skins/testSkin/CAVOLINI.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 36; // font size in pixels
+        parameter.minFilter = Texture.TextureFilter.Linear;
+        parameter.magFilter = Texture.TextureFilter.Linear;
         font = generator.generateFont(parameter);
         generator.dispose();
 
@@ -280,9 +282,9 @@ public class SongSelect implements Screen {
     @Override
     public void resize(int width, int height) {
         // Resize your screen here. The parameters represent the new window size.
-        viewport.update(width, height);
+        viewport.update(width, height, true);
+        stage.getViewport().update(width, height, true);
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
-        shapeRenderer.setProjectionMatrix(camera.combined);
     }
 
     @Override

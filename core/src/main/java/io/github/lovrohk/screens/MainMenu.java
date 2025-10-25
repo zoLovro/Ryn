@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.lovrohk.Main;
@@ -101,8 +102,10 @@ public class MainMenu implements Screen {
             batch.draw(logo, buttonsX, 824);
 
             // mouse capture
-            mouseX = Gdx.input.getX();
-            mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
+            Vector3 worldCoords = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            viewport.unproject(worldCoords);
+            mouseX = worldCoords.x;
+            mouseY = worldCoords.y;
 
             // buttons
             if (gameStartButtonRect.contains(mouseX, mouseY)) {

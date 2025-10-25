@@ -1,21 +1,18 @@
 package io.github.lovrohk.screens;
 
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import io.github.lovrohk.Main;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.InputAdapter;
 import io.github.lovrohk.screensHelpful.SettingsManager;
 
 /** First screen of the application. Displayed after the application is created. */
@@ -159,17 +156,32 @@ public class Settings implements Screen {
 
         switch (selected) {
             case "Back":
-                game.setScreen(new MainMenu(game)); // or however you return
+                game.setScreen(new MainMenu(game));
                 break;
 
             case "Master Volume":
+                break;
             case "Music Volume":
+                break;
             case "SFX Volume":
+                break;
             case "Language":
+                break;
             case "Resolution":
+                break;
             case "Fullscreen":
+                if(SettingsManager.settings.fullscreen) Gdx.graphics.setWindowedMode(SettingsManager.settings.resolutionWidth, SettingsManager.settings.resolutionHeight);
+                else {
+                    Graphics.DisplayMode displayMode = Gdx.graphics.getDisplayMode();
+                    Gdx.graphics.setFullscreenMode(displayMode);
+                }
+                SettingsManager.settings.fullscreen = !SettingsManager.settings.fullscreen;
+                SettingsManager.save();
+                break;
             case "Background dim":
+                break;
             case "Note speed":
+                break;
             case "Keybinds":
                 dispose();
                 game.setScreen(new KeybindsScreen(game));
@@ -211,8 +223,6 @@ public class Settings implements Screen {
                 break;
 
             case "Fullscreen":
-                SettingsManager.settings.fullscreen = !SettingsManager.settings.fullscreen;
-                SettingsManager.save();
                 break;
 
             case "Background dim":

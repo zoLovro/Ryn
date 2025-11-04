@@ -33,6 +33,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.lovrohk.screensHelpful.SongTile;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
+import io.github.lovrohk.screensHelpful.VideoPlayerInterface;
 
 /** First screen of the application. Displayed after the application is created. */
 public class SongSelect implements Screen {
@@ -74,7 +75,7 @@ public class SongSelect implements Screen {
     protected Label.LabelStyle labelStyle;
     protected float infoPanelX, infoPanelY, infoPanelWidth, infoPanelHeight;
     protected SongTile selectedTile;
-
+    
 
     public SongSelect(Main game) {this.game = game;}
 

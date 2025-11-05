@@ -102,6 +102,8 @@ public class GameLoop implements Screen {
     String finishedMiss;
     protected int[] keyCodes;
 
+    protected Texture blackPixel;
+
     public GameLoop(Song selectedSong, Main game) {
         this.song = Gdx.audio.newMusic(Gdx.files.internal(selectedSong.getAudioFile()));
         this.file = Gdx.files.internal(selectedSong.getNoteFile());
@@ -177,6 +179,7 @@ public class GameLoop implements Screen {
         // background
         bgTexture = new Texture(Gdx.files.internal(selectedSong.getBackgroundFile()));
         dimmedBg = SettingsManager.settings.backgrounDim;
+        blackPixel = new Texture(Gdx.files.internal("gameImages/whitePixel.png"));
 
         // finished screen
         rankAchievedManager = new RankAchievedManager(scoreManager);
@@ -211,6 +214,9 @@ public class GameLoop implements Screen {
                 // background
                 batch.setColor(dimmedBg, dimmedBg, dimmedBg, 1f);
                 batch.draw(bgTexture, 0, 0, screenWidth, screenHeight);
+                // darkened note bg
+                batch.setColor(0, 0, 0, 0.3f);
+                batch.draw(blackPixel, (float) screenWidth /2 - 223, 0, 446, screenHeight);
                 batch.setColor(Color.WHITE);
 
                 // notes

@@ -14,7 +14,13 @@ gameImages/mainMenuBG.png
 gameImages/settingsBG.jpg
 gameImages/settingsButton.png
 gameImages/settingsButtonSelect.png
+gameImages/whitePixel.png
 maps/index.json
+maps/karubi_akami_override/background.jpg
+maps/karubi_akami_override/noteFIle.txt
+maps/karubi_akami_override/song.mp3
+maps/karubi_akami_override/songInfo.json
+maps/karubi_akami_override/song_trimmed.mp3
 maps/liella_chance_day_chance_way/background.jpg
 maps/liella_chance_day_chance_way/noteFile.txt
 maps/liella_chance_day_chance_way/song.mp3

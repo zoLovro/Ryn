@@ -1,0 +1,9 @@
+{
+  "title": "Override",
+  "artist": "Karubi Akami",
+  "bpm": 102,
+  "audio": "maps/karubi_akami_override/song.mp3",
+  "audioTrimmed": "maps/karubi_akami_override/song_trimmed.mp3",
+  "background": "maps/karubi_akami_override/background.jpg",
+  "noteFile": "maps/karubi_akami_override/noteFile.txt"
+}

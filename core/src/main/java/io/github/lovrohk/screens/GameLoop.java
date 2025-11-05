@@ -101,6 +101,7 @@ public class GameLoop implements Screen {
     String finished50;
     String finishedMiss;
     protected int[] keyCodes;
+    private boolean[] prevKeyDown;
 
     protected Texture blackPixel;
 
@@ -198,6 +199,9 @@ public class GameLoop implements Screen {
         for (int i = 0; i < savedKeys.length; i++) {
             keyCodes[i] = Input.Keys.valueOf(savedKeys[i].toUpperCase());
         }
+        // tracking key releases
+        prevKeyDown = new boolean[keyCodes.length];
+        for (int i = 0; i < prevKeyDown.length; i++) prevKeyDown[i] = false;
     }
 
     @Override
@@ -246,10 +250,25 @@ public class GameLoop implements Screen {
             batch.end();
 
             // hit detection
-            if(Gdx.input.isKeyJustPressed(keyCodes[0])) noteManager.checkHit(songTime, 1);
-            if(Gdx.input.isKeyJustPressed(keyCodes[1])) noteManager.checkHit(songTime, 2);
-            if(Gdx.input.isKeyJustPressed(keyCodes[2])) noteManager.checkHit(songTime, 3);
-            if(Gdx.input.isKeyJustPressed(keyCodes[3])) noteManager.checkHit(songTime, 4);
+            for (int i = 0; i < keyCodes.length; i++) {
+                int lane = i + 1;
+                int key = keyCodes[i];
+                boolean isDown = Gdx.input.isKeyPressed(key);
+                boolean wasDown = prevKeyDown[i];
+
+                if (Gdx.input.isKeyJustPressed(key)) {
+                    noteManager.checkHit(songTime, lane);
+                }
+
+                // release
+                if (wasDown && !isDown) {
+                    noteManager.releaseHold(songTime, lane);
+                }
+
+                // update previous state for next frame
+                prevKeyDown[i] = isDown;
+            }
+
 
             if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) pause();
 

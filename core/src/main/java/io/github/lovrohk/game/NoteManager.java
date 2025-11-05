@@ -35,25 +35,48 @@ public class NoteManager {
         for (Note note : notes) {
             note.update(delta, songTime);
 
-            if (note.isHit() || songTime - note.getTime() > 0.25) {
-                toRemove.add(note);
-                if (!note.isHit() && songTime - note.getTime() > 0.25) {
-                    accuracy[0] += 1;
+            boolean isHold = note instanceof HoldNote;
+            boolean shouldRemove = false;
+
+            if (note.isHit()) {
+                shouldRemove = true;
+            } else if (isHold) {
+                HoldNote hold = (HoldNote) note;
+
+                // miss only if the end time has passed and player never held it
+                if (!hold.isHolding() && songTime - hold.getEndTime() > 0.25f) {
+                    accuracy[0]++;
                     scoreManager.resetCombo();
                     scoreManager.update(accuracy);
                     healthbarManager.missHealth();
                     missSound.play(sfxVolume);
+                    shouldRemove = true;
                 }
+            } else {
+                // normal tap note miss
+                if (songTime - note.getTime() > 0.25f) {
+                    accuracy[0]++;
+                    scoreManager.resetCombo();
+                    scoreManager.update(accuracy);
+                    healthbarManager.missHealth();
+                    missSound.play(sfxVolume);
+                    shouldRemove = true;
+                }
+            }
+
+            if (shouldRemove) {
+                toRemove.add(note);
             }
         }
 
-        if(!toRemove.isEmpty()) {
+        if (!toRemove.isEmpty()) {
             notes.removeAll(toRemove);
             toRemove.clear();
         }
 
         healthbarManager.healthDraw();
     }
+
 
     public void draw(SpriteBatch batch) {
         for (Note note : notes) {
@@ -68,35 +91,70 @@ public class NoteManager {
         float missWindow = 0.5f; // miss
         float minDiff = Float.MAX_VALUE;
 
-        for(Note note : notes) {
+        for (Note note : notes) {
+            if (note.isHit()) continue;
             if (note.getLane() != inputLane) continue;
             float diff = Math.abs(songTime - note.time);
-            if(diff < minDiff) { minDiff = diff; closest = note; }
+            if (diff < minDiff) {
+                minDiff = diff;
+                closest = note;
+            }
         }
 
-        if (closest != null) {
-            if (minDiff <= hit200) {
-                closest.hit();
-                accuracy[2] += 1;
-                scoreManager.addCombo();
-                scoreManager.update(accuracy);
-                healthbarManager.hit200Health();
-                hitSound.play(sfxVolume);
-            } else if (minDiff <= hit50) {
-                closest.hit();
-                accuracy[1] += 1;
-                scoreManager.addCombo();
-                scoreManager.update(accuracy);
-                healthbarManager.hit50Health();
-                hitSound.play(sfxVolume);
-            } else if (minDiff <= missWindow) {
-                closest.hit();
-                accuracy[0] += 1;
-                scoreManager.resetCombo();
-                scoreManager.update(accuracy);
-                healthbarManager.missHealth();
-                missSound.play(sfxVolume);
+        if (closest == null) return;
+
+        // --- HOLD NOTE HANDLING ---
+        if (closest instanceof HoldNote holdNote) {
+            if (!holdNote.isHolding()) {
+                // Start holding if pressed close enough to start time
+                if (minDiff <= hit200) {
+                    holdNote.startHold();
+                    accuracy[2]++;
+                    scoreManager.addCombo();
+                    scoreManager.update(accuracy);
+                    healthbarManager.hit200Health();
+                    // hitSound.play(sfxVolume);
+                } else if (minDiff <= hit50) {
+                    holdNote.startHold();
+                    accuracy[1]++;
+                    scoreManager.addCombo();
+                    scoreManager.update(accuracy);
+                    healthbarManager.hit50Health();
+                    // hitSound.play(sfxVolume);
+                } else if (minDiff <= missWindow) {
+                    // pressed too early/late
+                    accuracy[0]++;
+                    scoreManager.resetCombo();
+                    scoreManager.update(accuracy);
+                    healthbarManager.missHealth();
+                    missSound.play(sfxVolume);
+                }
             }
+            return;
+        }
+
+        // --- NORMAL TAP NOTE HANDLING ---
+        if (minDiff <= hit200) {
+            closest.hit();
+            accuracy[2]++;
+            scoreManager.addCombo();
+            scoreManager.update(accuracy);
+            healthbarManager.hit200Health();
+            // hitSound.play(sfxVolume);
+        } else if (minDiff <= hit50) {
+            closest.hit();
+            accuracy[1]++;
+            scoreManager.addCombo();
+            scoreManager.update(accuracy);
+            healthbarManager.hit50Health();
+            // hitSound.play(sfxVolume);
+        } else if (minDiff <= missWindow) {
+            closest.hit();
+            accuracy[0]++;
+            scoreManager.resetCombo();
+            scoreManager.update(accuracy);
+            healthbarManager.missHealth();
+            missSound.play(sfxVolume);
         }
     }
 
@@ -113,6 +171,11 @@ public class NoteManager {
                     float time = Float.parseFloat(temp[1].replace("f", "").trim());
                     int lane = Integer.parseInt(temp[2].replace(";", "").trim());
                     notes1.add(new NoteVertical(time, lane));
+                } else if (temp[0].equalsIgnoreCase("hold")) {
+                    float start = Float.parseFloat(temp[1].replace("f", "").trim());
+                    float end = Float.parseFloat(temp[2].replace("f", "").trim());
+                    int lane = Integer.parseInt(temp[3].replace(";", "").trim());
+                    notes1.add(new HoldNote(start, end, lane));
                 }
             }
         } catch (IOException e) {
@@ -120,6 +183,45 @@ public class NoteManager {
         }
         return notes1;
     }
+
+    public void releaseHold(float songTime, int inputLane) {
+        for (Note note : notes) {
+            if (note instanceof HoldNote hold && hold.getLane() == inputLane && hold.isHolding()) {
+                hold.releaseHold(songTime);
+
+                // Check timing
+                float diffEnd = Math.abs(songTime - hold.getEndTime());
+                if (diffEnd <= 0.1f) {
+                    // released on time
+                    accuracy[2]++; // perfect
+                    scoreManager.addCombo();
+                    scoreManager.update(accuracy);
+                    healthbarManager.hit200Health();
+                    // hitSound.play(sfxVolume);
+                } else if (songTime < hold.getEndTime() - 0.15f) {
+                    // released too early -> miss
+                    accuracy[0]++;
+                    scoreManager.resetCombo();
+                    scoreManager.update(accuracy);
+                    healthbarManager.missHealth();
+                    missSound.play(sfxVolume);
+                } else {
+                    // released close but not perfect
+                    accuracy[1]++;
+                    scoreManager.addCombo();
+                    scoreManager.update(accuracy);
+                    healthbarManager.hit50Health();
+                    // hitSound.play(sfxVolume);
+                }
+
+                // always remove hold after release
+                hold.hit();
+                break;
+            }
+        }
+    }
+
+
 
 
     public void setNotes(List<Note> a) {

@@ -17,13 +17,11 @@ public abstract class Note {
         this.hit = false;
     }
 
-    // every note must implement its own update logic
+
     public abstract void update(float delta, float songTime);
 
-    // every note must implement its own draw logic
     public abstract void draw(SpriteBatch batch);
 
-    // optional: generic hit detection
     public boolean isHit() {
         return hit;
     }

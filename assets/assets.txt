@@ -48,6 +48,7 @@ skins/testSkin/fullHitLeft.png
 skins/testSkin/fullHitRight.png
 skins/testSkin/fullHitUp.png
 skins/testSkin/hitSound.wav
+skins/testSkin/holdBody.png
 skins/testSkin/missSound.mp3
 skins/testSkin/pauseScreen.png
 skins/testSkin/ranking-A.png

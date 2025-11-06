@@ -8,11 +8,21 @@ note, 6.831f, 3
 note, 6.9045f, 2
 note, 6.978f, 2
 note, 6.978f, 4
+note, 7.125f, 1
+note, 7.1985f, 2
+note, 7.272f, 3
+note, 7.272f, 4
+note, 7.419f, 3
+note, 7.419f, 4
+note, 7.566f, 1
+note, 7.566f, 2
+
+note, 7.860f, 3
+note, 7.860f, 4
+hold, 7.860f, 8.154f, 1
+hold, 8.007, 8.154f, 2
 
 
-note, 7.272f, 2
-note, 7.566f, 3
-note, 7.860f, 4;
 note, 8.154f, 2;
 note, 8.448f, 2;
 note, 8.742f, 3;

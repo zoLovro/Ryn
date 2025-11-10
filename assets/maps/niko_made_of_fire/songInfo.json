@@ -1,0 +1,9 @@
+{
+  "title": "Made of fire",
+  "artist": "NIKO",
+  "bpm": 162,
+  "audio": "maps/niko_made_of_fire/song.mp3",
+  "audioTrimmed": "maps/niko_made_of_fire/song_trimmed.mp3",
+  "background": "maps/niko_made_of_fire/background.jpg",
+  "noteFile": "maps/niko_made_of_fire/noteFile.txt"
+}

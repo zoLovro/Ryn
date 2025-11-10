@@ -31,6 +31,11 @@ maps/liella_nonfiction/noteFIle.txt
 maps/liella_nonfiction/song.mp3
 maps/liella_nonfiction/songInfo.json
 maps/liella_nonfiction/song_trimmed.mp3
+maps/niko_made_of_fire/background.jpg
+maps/niko_made_of_fire/noteFIle.txt
+maps/niko_made_of_fire/song.mp3
+maps/niko_made_of_fire/songInfo.json
+maps/niko_made_of_fire/song_trimmed.mp3
 skins/testSkin/CAVOLINI.TTF
 skins/testSkin/CAVOLINIBOLD.TTF
 skins/testSkin/CAVOLINIBOLDITALIC.TTF

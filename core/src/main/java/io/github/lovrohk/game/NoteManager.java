@@ -49,7 +49,7 @@ public class NoteManager {
                     scoreManager.resetCombo();
                     scoreManager.update(accuracy);
                     healthbarManager.missHealth();
-                    missSound.play(sfxVolume);
+                    //missSound.play(sfxVolume);
                     shouldRemove = true;
                 }
             } else {
@@ -59,7 +59,7 @@ public class NoteManager {
                     scoreManager.resetCombo();
                     scoreManager.update(accuracy);
                     healthbarManager.missHealth();
-                    missSound.play(sfxVolume);
+                    //missSound.play(sfxVolume);
                     shouldRemove = true;
                 }
             }
@@ -127,7 +127,7 @@ public class NoteManager {
                     scoreManager.resetCombo();
                     scoreManager.update(accuracy);
                     healthbarManager.missHealth();
-                    missSound.play(sfxVolume);
+                    //missSound.play(sfxVolume);
                 }
             }
             return;
@@ -154,7 +154,7 @@ public class NoteManager {
             scoreManager.resetCombo();
             scoreManager.update(accuracy);
             healthbarManager.missHealth();
-            missSound.play(sfxVolume);
+            //missSound.play(sfxVolume);
         }
     }
 
@@ -204,7 +204,7 @@ public class NoteManager {
                     scoreManager.resetCombo();
                     scoreManager.update(accuracy);
                     healthbarManager.missHealth();
-                    missSound.play(sfxVolume);
+                    //missSound.play(sfxVolume);
                 } else {
                     // released close but not perfect
                     accuracy[1]++;

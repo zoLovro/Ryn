@@ -31,6 +31,15 @@ maps/liella_nonfiction/noteFIle.txt
 maps/liella_nonfiction/song.mp3
 maps/liella_nonfiction/songInfo.json
 maps/liella_nonfiction/song_trimmed.mp3
+maps/max_coveri_running_in_the_90s/82300411_p0.jpg
+maps/max_coveri_running_in_the_90s/MAX COVERI - RUNNING IN THE 90'S (Cut Ver.) (NineSey) [GAS GAS GAS].txt
+maps/max_coveri_running_in_the_90s/MAX COVERI - RUNNING IN THE 90's (Cut Ver.) (NineSey) [Easy].txt
+maps/max_coveri_running_in_the_90s/MAX COVERI - RUNNING IN THE 90's (Cut Ver.) (NineSey) [Hard].txt
+maps/max_coveri_running_in_the_90s/MAX COVERI - RUNNING IN THE 90's (Cut Ver.) (NineSey) [Insane].txt
+maps/max_coveri_running_in_the_90s/MAX COVERI - RUNNING IN THE 90's (Cut Ver.) (NineSey) [Normal].txt
+maps/max_coveri_running_in_the_90s/noteFile.txt
+maps/max_coveri_running_in_the_90s/song.mp3
+maps/max_coveri_running_in_the_90s/songInfo.json
 maps/niko_made_of_fire/background.jpg
 maps/niko_made_of_fire/noteFile.txt
 maps/niko_made_of_fire/song.mp3

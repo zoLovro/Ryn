@@ -220,7 +220,7 @@ public class GameLoop implements Screen {
                 batch.draw(bgTexture, 0, 0, screenWidth, screenHeight);
                 // darkened note bg
                 batch.setColor(0, 0, 0, 0.3f);
-                batch.draw(blackPixel, (float) screenWidth /2 - 223, 0, 446, screenHeight);
+                batch.draw(blackPixel, (float) screenWidth /2 - 256, 0, 512, screenHeight);
                 batch.setColor(Color.WHITE);
 
                 // notes
@@ -241,10 +241,10 @@ public class GameLoop implements Screen {
                 emptyNoteTexture4 = Gdx.input.isKeyPressed(keyCodes[3])
                     ? fullNoteRight
                     : emptyNoteRight;
-                batch.draw(emptyNoteTexture1, 802, hitLineHeight, 64, 64);
-                batch.draw(emptyNoteTexture2, 886, hitLineHeight, 64, 64);
-                batch.draw(emptyNoteTexture3, 970, hitLineHeight, 64, 64);
-                batch.draw(emptyNoteTexture4, 1054, hitLineHeight, 64, 64);
+                batch.draw(emptyNoteTexture1, 704, hitLineHeight, 128, 128);
+                batch.draw(emptyNoteTexture2, 832, hitLineHeight, 128, 128);
+                batch.draw(emptyNoteTexture3, 960, hitLineHeight, 128, 128);
+                batch.draw(emptyNoteTexture4, 1088, hitLineHeight, 128, 128);
 
 
             batch.end();

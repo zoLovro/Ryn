@@ -32,7 +32,7 @@ maps/liella_nonfiction/song.mp3
 maps/liella_nonfiction/songInfo.json
 maps/liella_nonfiction/song_trimmed.mp3
 maps/niko_made_of_fire/background.jpg
-maps/niko_made_of_fire/noteFIle.txt
+maps/niko_made_of_fire/noteFile.txt
 maps/niko_made_of_fire/song.mp3
 maps/niko_made_of_fire/songInfo.json
 maps/niko_made_of_fire/song_trimmed.mp3
@@ -53,6 +53,11 @@ skins/testSkin/fullHitLeft.png
 skins/testSkin/fullHitRight.png
 skins/testSkin/fullHitUp.png
 skins/testSkin/hitSound.wav
+skins/testSkin/hitTexture-200.png
+skins/testSkin/hitTexture-300-Combo.png
+skins/testSkin/hitTexture-300.png
+skins/testSkin/hitTexture-50.png
+skins/testSkin/hitTexture-miss.png
 skins/testSkin/holdBody.png
 skins/testSkin/missSound.mp3
 skins/testSkin/pauseScreen.png

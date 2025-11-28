@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import io.github.lovrohk.screensHelpful.HitEffect;
 import io.github.lovrohk.screensHelpful.SettingsManager;
 
 import java.io.*;
@@ -24,6 +25,13 @@ public class NoteManager {
     // sound stuff
     Sound hitSound = Gdx.audio.newSound(Gdx.files.internal("skins/testSkin/hitSound.wav"));
     Sound missSound = Gdx.audio.newSound(Gdx.files.internal("skins/testSkin/missSound.mp3"));
+
+    // visual hit effects
+    HitEffect hit300Effect = new HitEffect(0, 960, 800, 1);
+    HitEffect hit300EffectCombo = new HitEffect(1, 960, 800, 1);
+    HitEffect hit200Effect = new HitEffect(2, 960, 800, 1);
+    HitEffect hit50Effect = new HitEffect(3, 960, 800, 1);
+    HitEffect hitMissEffect = new HitEffect(4, 960, 800, 1);
 
     public NoteManager(List<Note> notes, ScoreManager scoreManager) {
         this.notes = notes;
@@ -75,6 +83,11 @@ public class NoteManager {
         }
 
         healthbarManager.healthDraw();
+        hit300Effect.update(delta);
+        hit300EffectCombo.update(delta);
+        hit200Effect.update(delta);
+        hit50Effect.update(delta);
+        hitMissEffect.update(delta);
     }
 
 
@@ -82,6 +95,11 @@ public class NoteManager {
         for (Note note : notes) {
             note.draw(batch);
         }
+        hit300Effect.draw(batch);
+        hit300EffectCombo.draw(batch);
+        hit200Effect.draw(batch);
+        hit50Effect.draw(batch);
+        hitMissEffect.draw(batch);
     }
 
     public void checkHit(float songTime, int inputLane) {
@@ -113,6 +131,7 @@ public class NoteManager {
                     scoreManager.addCombo();
                     scoreManager.update(accuracy);
                     healthbarManager.hit200Health();
+                    hit200Effect.trigger();
                     // hitSound.play(sfxVolume);
                 } else if (minDiff <= hit50) {
                     holdNote.startHold();
@@ -120,6 +139,7 @@ public class NoteManager {
                     scoreManager.addCombo();
                     scoreManager.update(accuracy);
                     healthbarManager.hit50Health();
+                    hit50Effect.trigger();
                     // hitSound.play(sfxVolume);
                 } else if (minDiff <= missWindow) {
                     // pressed too early/late
@@ -127,6 +147,7 @@ public class NoteManager {
                     scoreManager.resetCombo();
                     scoreManager.update(accuracy);
                     healthbarManager.missHealth();
+                    hitMissEffect.trigger();
                     //missSound.play(sfxVolume);
                 }
             }
@@ -140,6 +161,7 @@ public class NoteManager {
             scoreManager.addCombo();
             scoreManager.update(accuracy);
             healthbarManager.hit200Health();
+            hit200Effect.trigger();
             // hitSound.play(sfxVolume);
         } else if (minDiff <= hit50) {
             closest.hit();
@@ -147,6 +169,7 @@ public class NoteManager {
             scoreManager.addCombo();
             scoreManager.update(accuracy);
             healthbarManager.hit50Health();
+            hit50Effect.trigger();
             // hitSound.play(sfxVolume);
         } else if (minDiff <= missWindow) {
             closest.hit();
@@ -154,6 +177,7 @@ public class NoteManager {
             scoreManager.resetCombo();
             scoreManager.update(accuracy);
             healthbarManager.missHealth();
+            hitMissEffect.trigger();
             //missSound.play(sfxVolume);
         }
     }
@@ -197,6 +221,7 @@ public class NoteManager {
                     scoreManager.addCombo();
                     scoreManager.update(accuracy);
                     healthbarManager.hit200Health();
+                    hit200Effect.trigger();
                     // hitSound.play(sfxVolume);
                 } else if (songTime < hold.getEndTime() - 0.15f) {
                     // released too early -> miss
@@ -204,6 +229,7 @@ public class NoteManager {
                     scoreManager.resetCombo();
                     scoreManager.update(accuracy);
                     healthbarManager.missHealth();
+                    hitMissEffect.trigger();
                     //missSound.play(sfxVolume);
                 } else {
                     // released close but not perfect
@@ -211,6 +237,7 @@ public class NoteManager {
                     scoreManager.addCombo();
                     scoreManager.update(accuracy);
                     healthbarManager.hit50Health();
+                    hit50Effect.trigger();
                     // hitSound.play(sfxVolume);
                 }
 

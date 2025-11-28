@@ -17,6 +17,9 @@ public class NoteVertical extends Note {
     private float speed = SettingsManager.settings.noteSpeed * 1000;
     private int hitLine = 50;
 
+    float drawX;
+    float drawY;
+
     public NoteVertical(float time, int lane) {
         super(time, lane);
 
@@ -37,16 +40,21 @@ public class NoteVertical extends Note {
 
     @Override
     public void draw(SpriteBatch batch) {
-        batch.draw(texture, transformLane(lane), y);
+        float textureHeight = texture.getHeight();
+
+        drawX = transformLane(lane);
+        drawY = y - textureHeight / 2;
+
+        batch.draw(texture, drawX, drawY);
     }
 
 
     private int transformLane(int lane) {
         int result = switch (lane) {
-            case 1 -> 802;
-            case 2 -> 886;
-            case 3 -> 970;
-            case 4 -> 1054;
+            case 1 -> 704;
+            case 2 -> 832;
+            case 3 -> 960;
+            case 4 -> 1088;
             default -> 0;
         };
         return result;

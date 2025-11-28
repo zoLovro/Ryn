@@ -18,10 +18,14 @@ public class HoldNote extends Note{
     private int hitLine = 50;
     private boolean holding = false;
     private boolean releasedEarly = false;
+    private int lane;
+
+    private float endY;
 
     public HoldNote(float startTime, float endTime, int lane) {
         super(startTime, lane);
         this.endTime = endTime;
+        this.lane = lane;
 
         switch (lane) {
             case 1 -> texture = verticalTextureLeft;
@@ -37,6 +41,7 @@ public class HoldNote extends Note{
         float startDist = (time - songTime) * speed;
         float endDist = (endTime - songTime) * speed;
         y = hitLine + startDist;
+        endY = hitLine + endDist;
 
         if (holding && songTime > endTime) {
             hit = true;
@@ -46,25 +51,46 @@ public class HoldNote extends Note{
 
     @Override
     public void draw(SpriteBatch batch) {
-        float bodyOffset = 32f;
-        float bodyY = y + bodyOffset;
-        float height = (endTime - time) * speed - bodyOffset; // reduce body height
-        if (height < 0) height = 0;
-        // draw body with offset
-        batch.setColor(1, 1, 1, 0.5f); // translucent
-        batch.draw(holdBody, transformLane(lane), bodyY, holdBody.getWidth(), height);
-        // draw head
-        batch.setColor(1, 1, 1, 1f);
-        batch.draw(texture, transformLane(lane), y, texture.getWidth(), texture.getHeight());
-    }
+        float laneX = transformLane(lane);
 
+        // head center and tail center
+        float headCenterY = y;
+        float tailCenterY = endY;
+
+        // 1) draw body between head and tail centers
+        float bodyTop = Math.max(headCenterY, tailCenterY);
+        float bodyBottom = Math.min(headCenterY, tailCenterY);
+        float bodyHeight = bodyTop - bodyBottom;
+
+        if (bodyHeight < 0) bodyHeight = 0;
+
+        // body is drawn from its bottom-left
+        batch.setColor(1, 1, 1, 0.5f);
+        batch.draw(holdBody,
+            laneX,
+            bodyBottom,             // bottom at the lower center
+            holdBody.getWidth(),
+            bodyHeight
+        );
+
+        // 2) draw head, with y as CENTER
+        batch.setColor(1, 1, 1, 1f);
+        float headBottomY = headCenterY - texture.getHeight() / 2f;
+
+        batch.draw(texture,
+            laneX,                 // left as before
+            headBottomY,           // adjusted so y is center
+            texture.getWidth(),
+            texture.getHeight()
+        );
+    }
 
     private int transformLane(int lane) {
         return switch (lane) {
-            case 1 -> 802;
-            case 2 -> 886;
-            case 3 -> 970;
-            case 4 -> 1054;
+            case 1 -> 704;
+            case 2 -> 832;
+            case 3 -> 960;
+            case 4 -> 1088;
             default -> 0;
         };
     }

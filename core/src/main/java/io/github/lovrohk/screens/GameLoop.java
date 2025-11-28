@@ -241,10 +241,10 @@ public class GameLoop implements Screen {
                 emptyNoteTexture4 = Gdx.input.isKeyPressed(keyCodes[3])
                     ? fullNoteRight
                     : emptyNoteRight;
-                batch.draw(emptyNoteTexture1, 704, hitLineHeight, 128, 128);
-                batch.draw(emptyNoteTexture2, 832, hitLineHeight, 128, 128);
-                batch.draw(emptyNoteTexture3, 960, hitLineHeight, 128, 128);
-                batch.draw(emptyNoteTexture4, 1088, hitLineHeight, 128, 128);
+                batch.draw(emptyNoteTexture1, 704, hitLineHeight - 64, 128, 128);
+                batch.draw(emptyNoteTexture2, 832, hitLineHeight - 64, 128, 128);
+                batch.draw(emptyNoteTexture3, 960, hitLineHeight - 64, 128, 128);
+                batch.draw(emptyNoteTexture4, 1088, hitLineHeight - 64, 128, 128);
 
 
             batch.end();
